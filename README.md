@@ -6,7 +6,7 @@ Refer to ProjectInstructions.pdf for project details and breakdown.
 ### Project Setup:
 1. Install Python3<br/>
 
-2. Install MySQL<br/>
+2. Install PostgreSQL<br/>
 
 3. Create Database called `programeval`<br/>
 
