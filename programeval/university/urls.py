@@ -1,4 +1,4 @@
 from django.urls import path, re_path
-import university.views
+from university import views
 
 urlpatterns = []
