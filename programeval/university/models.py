@@ -18,7 +18,7 @@ class Faculty(models.Model):
         ADJUNCT = 4, _('Adjunct')
 
     name = models.CharField(_("Name"), max_length=50)
-    uni_id = models.CharField(_("University ID"), max_length=9, unique=True, primary_key=True)
+    uni_id = models.CharField(_("University ID"), max_length=4, unique=True, primary_key=True, validators=[MinLengthValidator(4)])
     email = models.CharField(_("Email"), max_length=50)
     rank = models.PositiveSmallIntegerField(_("Rank"), choices=RankType.choices, default=RankType.ADJUNCT)
     department = models.ForeignKey(Department, related_name='faculty_dept', on_delete=models.CASCADE)

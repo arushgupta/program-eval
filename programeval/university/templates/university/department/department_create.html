@@ -1,0 +1,10 @@
+<!-- Form for creating or updating a department -->
+{% extends 'university/base.html' %}
+
+{% block content %}
+<form method="post" action="" novalidate>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary" type="submit">Save</button>
+  </form>
+{% endblock %}

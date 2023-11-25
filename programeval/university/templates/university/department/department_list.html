@@ -1,0 +1,38 @@
+<!-- department_list.html -->
+{% extends 'university/base.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <div>
+      <h2>Departments</h2>
+      
+      <a class="btn btn-primary mb-2" href="{% url 'dept-add' %}">Add new Department</a>
+    </div>
+
+    {% if departments %}
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Code</th>
+            <th scope="col">Name</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for department in departments %}
+            <tr>
+              <td><a href="{% url 'dept-detail' pk=department.dept_code %}">{{ department.dept_code }}</a></td>
+              <td>{{ department.name }}</td>
+              <td>
+                <a class="btn btn-warning btn-sm" href="{% url 'dept-update' pk=department.dept_code %}">Edit</a>
+                <a class="btn btn-danger btn-sm" href="{% url 'dept-delete' pk=department.dept_code %}">Delete</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No departments have been added yet.</p>
+    {% endif %}
+  </div>
+{% endblock %}
