@@ -33,7 +33,6 @@ def department_update(request, pk):
     department = get_object_or_404(Department, pk=pk)
     if request.method == 'POST':
         form = DepartmentForm(request.POST, instance=department)
-        import pdb; pdb.set_trace()
         if form.is_valid():
             form.save()
             return redirect('dept-detail', department.dept_code)
