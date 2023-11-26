@@ -6,6 +6,9 @@ class Department(models.Model):
     name = models.CharField(_("Name"), max_length=50, unique=True)
     dept_code = models.CharField(_("Code"), max_length=4, unique=True, primary_key=True, validators=[MinLengthValidator(1)])
 
+    def __str__(self):
+        return f"{self.dept_code} {self.name}"
+
     class Meta:
         verbose_name = _('Department')
         verbose_name_plural = _('Departments')
@@ -22,6 +25,7 @@ class Faculty(models.Model):
     email = models.CharField(_("Email"), max_length=50)
     rank = models.PositiveSmallIntegerField(_("Rank"), choices=RankType.choices, default=RankType.ADJUNCT)
     department = models.ForeignKey(Department, related_name='faculty_dept', on_delete=models.CASCADE)
+    is_active = models.BooleanField(_("Is Active"), default=True)
 
     class Meta:
         verbose_name = _('Faculty')

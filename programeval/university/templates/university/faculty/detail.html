@@ -1,0 +1,10 @@
+<!-- faculty_detail.html -->
+{% extends 'university/base.html' %}
+
+{% block content %}
+  <h2>{{ faculty.name }}</h2>
+  <p>Code: {{ faculty.uni_id }}</p>
+  <p>Email: {{ faculty.email }}</p>
+  <p>Rank: {{ faculty.rank }}</p>
+  <p>Department: {{ faculty.department }}</p>
+{% endblock %}
