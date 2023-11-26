@@ -22,7 +22,7 @@ class Faculty(models.Model):
 
     name = models.CharField(_("Name"), max_length=50)
     uni_id = models.CharField(_("University ID"), max_length=4, unique=True, primary_key=True, validators=[MinLengthValidator(4)])
-    email = models.CharField(_("Email"), max_length=50)
+    email = models.EmailField(_("Email"), max_length=50, blank=False)
     rank = models.PositiveSmallIntegerField(_("Rank"), choices=RankType.choices, default=RankType.ADJUNCT)
     department = models.ForeignKey(Department, related_name='faculty_dept', on_delete=models.CASCADE)
     is_active = models.BooleanField(_("Is Active"), default=True)
