@@ -1,0 +1,11 @@
+<!-- Form for deleting a department -->
+{% extends 'university/base.html' %}
+
+{% block content %}
+<h1>Fire a Staff Member</h1>
+<p>Are you sure you want to fire this faculty member? {{ faculty.name }}: {{ faculty.uni_id }}</p>
+<form method="post" action="">
+    {% csrf_token %}
+    <button class="btn btn-danger" type="submit">Fire</button>
+  </form>
+{% endblock %}
