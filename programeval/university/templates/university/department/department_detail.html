@@ -2,6 +2,33 @@
 {% extends 'university/base.html' %}
 
 {% block content %}
-  <h2>{{ department.name }}</h2>
-  <p>Code: {{ department.dept_code }}</p>
+  <h1>{{ department.name }} Department</h1>
+  <h6>Code: {{ department.dept_code }}</h6>
+<br>
+<h4>Programs</h4>
+<ul>
+  {% for program in department.prog_dept.all %}
+    <li>{{ program.name }} - Admin: {{ program.admin.name }}</li>
+  {% endfor %}
+</ul>
+<br>
+<h4>Active Faculty</h4>
+<ul>
+  {% for faculty in department.faculty_dept.all %}
+    {% if faculty.is_active %}
+      <li>{{ faculty.name }} - Rank: {{ faculty.get_rank_display }} {% if faculty.prog_admin.all %}(Programs: {% for program in faculty.prog_admin.all %}{{ program.name }}{% if not forloop.last %}, {% endif %}{% endfor %}){% endif %}</li>
+    {% endif %}
+  {% endfor %}
+</ul>
+<br>
+<h4>Fired/Inactive Faculty</h4>
+<ul>
+  {% for faculty in department.faculty_dept.all %}
+    {% if not faculty.is_active %}
+      <li>{{ faculty.name }} - Rank: {{ faculty.get_rank_display }}</li>
+    {% endif %}
+  {% endfor %}
+</ul>
+<br>
+  <a href="{% url 'dept-list' %}">Back to departments</a>
 {% endblock %}

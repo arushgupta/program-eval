@@ -3,7 +3,7 @@ from university.models import Department
 from university.forms import DepartmentForm
 
 def department_list(request):
-    departments = Department.objects.all()
+    departments = Department.objects.all().order_by('dept_code')
     return render(request, 'university/department/department_list.html', {'departments': departments})
 
 def department_detail(request, pk):

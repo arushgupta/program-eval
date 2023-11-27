@@ -1,14 +1,11 @@
-<!-- add_department.html -->
-
+<!-- Form for updating a program -->
 {% extends 'university/base.html' %}
 
 {% block content %}
-  <div class="container mt-5">
-    <h2 class="mb-4">Add a New Department</h2>
-
-    <form method="post" action="" novalidate>
-      {% csrf_token %}
-      {{ form.non_field_errors }}
+<h2>Update Program</h2>
+<form method="post" action="" novalidate>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
 
       {% for field in form %}
         <div class="form-group">
@@ -23,11 +20,7 @@
           {% endif %}
         </div>
       {% endfor %}
-      <button class="btn btn-primary mt-3" type="submit">Save</button>
-    </form>
-
-    <div class="mt-4">
-      <a href="{% url 'dept-list' %}" class="btn btn-secondary">Back to Departments</a>
-    </div>
-  </div>
+    <button class="btn btn-warning" type="submit" value="Update">Update</button>
+  </form>
+  <a href="{% url 'program-list' %}">Back to programs</a>
 {% endblock %}

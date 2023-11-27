@@ -1,7 +1,5 @@
 from django import forms
-from django.core.validators import EmailValidator, validate_email
-from django.core.exceptions import ValidationError
-from university.models import Department, Faculty
+from university.models import Department, Faculty, Program
 
 class DepartmentForm(forms.ModelForm):
     class Meta:
@@ -11,13 +9,23 @@ class DepartmentForm(forms.ModelForm):
 class AddFacultyForm(forms.ModelForm):
     class Meta:
         model = Faculty
-        fields = '__all__'
+        exclude = ('is_active', )
 
 class UpdateFacultyForm(forms.ModelForm):
     class Meta:
         model = Faculty
-        fields = '__all__'
+        exclude = ('is_active', )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["uni_id"].disabled = True
+
+class ProgramForm(forms.ModelForm):
+    class Meta:
+        model = Program
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        self.admin = Faculty.objects.filter(is_active=True).order_by('uni_id')
+        super().__init__(*args, **kwargs)
+        self.fields["admin"].queryset = self.admin
