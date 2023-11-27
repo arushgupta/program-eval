@@ -13,4 +13,9 @@ urlpatterns = [
     path('faculty/<str:pk>/', views.faculty_detail, name='faculty-detail'),
     path('faculty/<str:pk>/change/', views.faculty_update, name='faculty-update'),
     path('faculty/<str:pk>/fire/', views.faculty_fire, name='faculty-fire'),
+    path('programs/', views.program_list, name='program-list'),
+    path('programs/add/', views.program_create, name='program-add'),
+    path('programs/<str:pk>/', views.program_detail, name='program-detail'),
+    path('programs/<str:pk>/change/', views.program_update, name='program-update'),
+    path('programs/<str:pk>/remove/', views.program_delete, name='program-delete'),
 ]
