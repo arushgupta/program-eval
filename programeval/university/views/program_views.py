@@ -26,7 +26,7 @@ def program_update(request, pk):
         form = ProgramForm(request.POST, instance=program)
         if form.is_valid():
             form.save()
-            return redirect('program-detail', program.uni_id)
+            return redirect('program-detail', program.name)
     else:
         form = ProgramForm(instance=program)
     return render(request, 'university/program/update.html', {'form': form})
