@@ -3,7 +3,7 @@
 
 {% block content %}
   <h2>Program Details</h2>
-  <h6>{{ program.name }}</h2>
+  <p>Program: {{ program.name }}</p>
   <p>Program Head: {{ program.admin }}</p>
   <p>Department: {{ program.department }}</p>
   <a href="{% url 'program-list' %}">Back to programs</a>

@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from university.models import Program
-from university.forms import AddProgramForm
+from university.forms import ProgramForm
 
 def program_list(request):
-    programs = Program.objects.filter(is_active=True)
+    programs = Program.objects.all()
     return render(request, 'university/program/list.html', {'programs': programs})
 
 def program_detail(request, pk):
@@ -12,23 +12,23 @@ def program_detail(request, pk):
 
 def program_create(request):
     if request.method == 'POST':
-        form = AddProgramForm(request.POST)
+        form = ProgramForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('program-list')
     else:
-        form = AddProgramForm()
+        form = ProgramForm()
     return render(request, 'university/program/create.html', {'form': form})
 
 def program_update(request, pk):
-    program = get_object_or_404(Program, pk=pk, is_active=True)
+    program = get_object_or_404(Program, pk=pk)
     if request.method == 'POST':
-        form = AddProgramForm(request.POST, instance=program)
+        form = ProgramForm(request.POST, instance=program)
         if form.is_valid():
             form.save()
-            return redirect('faculty-detail', program.uni_id)
+            return redirect('program-detail', program.uni_id)
     else:
-        form = AddProgramForm(instance=program)
+        form = ProgramForm(instance=program)
     return render(request, 'university/program/update.html', {'form': form})
 
 def program_delete(request, pk):
@@ -36,4 +36,4 @@ def program_delete(request, pk):
     if request.method == 'POST':
         program.delete()
         return redirect('program-list')
-    return render(request, 'university/program/fire.html', {'program': program})
+    return render(request, 'university/program/delete.html', {'program': program})

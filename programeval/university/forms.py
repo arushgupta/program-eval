@@ -20,7 +20,12 @@ class UpdateFacultyForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["uni_id"].disabled = True
 
-class AddProgramForm(forms.ModelForm):
+class ProgramForm(forms.ModelForm):
     class Meta:
         model = Program
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        self.admin = Faculty.objects.filter(is_active=True).order_by('uni_id')
+        super().__init__(*args, **kwargs)
+        self.fields["admin"].queryset = self.admin

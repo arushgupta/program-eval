@@ -28,7 +28,7 @@ class Faculty(models.Model):
     is_active = models.BooleanField(_("Is Active"), default=True)
 
     def __str__(self):
-        return f"{self.uni_id}: {self.name}: {'Fired' if self.is_active == False else 'Active'}"
+        return f"{self.uni_id}: {self.name}"
 
     class Meta:
         verbose_name = _('Faculty')
@@ -36,8 +36,11 @@ class Faculty(models.Model):
 
 class Program(models.Model):
     name = models.CharField(_("Name"), max_length=100, unique=True, primary_key=True)
-    admin = models.ForeignKey(Faculty, on_delete=models.SET_NULL, null=True, related_name='prog_admin')
+    admin = models.ForeignKey(Faculty, on_delete=models.PROTECT, related_name='prog_admin')
     department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='prog_dept')
+
+    def __str__(self):
+        return f"{self.name}: {self.department.name}"
 
     class Meta:
         verbose_name = _('Program')

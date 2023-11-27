@@ -1,11 +1,12 @@
-<!-- Form for creating or updating a department -->
+<!-- Form for updating a department -->
 {% extends 'university/base.html' %}
 
 {% block content %}
-<h1>Update Department</h1>
+<h2>Update Department</h2>
 <form method="post" action="" novalidate>
     {% csrf_token %}
     {{ form.as_p }}
     <button class="btn btn-warning" type="submit" value="Update">Update</button>
   </form>
+  <a href="{% url 'dept-list' %}">Back to departments</a>
 {% endblock %}
