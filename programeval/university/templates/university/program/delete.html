@@ -1,0 +1,11 @@
+<!-- Form for deleting a program -->
+{% extends 'university/base.html' %}
+
+{% block content %}
+<h1>Delete a Program</h1>
+<p>Are you sure you want to delete this program? {{ program.name }}: {{ program.department }}</p>
+<form method="post" action="">
+    {% csrf_token %}
+    <button class="btn btn-danger" type="submit">Delete</button>
+  </form>
+{% endblock %}

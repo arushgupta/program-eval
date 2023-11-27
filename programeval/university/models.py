@@ -27,6 +27,9 @@ class Faculty(models.Model):
     department = models.ForeignKey(Department, related_name='faculty_dept', on_delete=models.CASCADE)
     is_active = models.BooleanField(_("Is Active"), default=True)
 
+    def __str__(self):
+        return f"{self.uni_id}: {self.name}: {'Fired' if self.is_active == False else 'Active'}"
+
     class Meta:
         verbose_name = _('Faculty')
         verbose_name_plural = _('Faculty Members')

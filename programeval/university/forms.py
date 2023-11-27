@@ -1,7 +1,5 @@
 from django import forms
-from django.core.validators import EmailValidator, validate_email
-from django.core.exceptions import ValidationError
-from university.models import Department, Faculty
+from university.models import Department, Faculty, Program
 
 class DepartmentForm(forms.ModelForm):
     class Meta:
@@ -21,3 +19,8 @@ class UpdateFacultyForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["uni_id"].disabled = True
+
+class AddProgramForm(forms.ModelForm):
+    class Meta:
+        model = Program
+        fields = '__all__'

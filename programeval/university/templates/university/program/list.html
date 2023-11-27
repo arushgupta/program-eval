@@ -1,0 +1,40 @@
+<!-- program_list.html -->
+{% extends 'university/base.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <div>
+      <h2>Programs</h2>
+      
+      <a class="btn btn-primary mb-2" href="{% url 'faculty-add' %}">Add new Program</a>
+    </div>
+
+    {% if programs %}
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Admin</th>
+            <th scope="col">Department</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for program in programs %}
+            <tr>
+              <td><a href="{% url 'program-detail' pk=program.name %}">{{ program.name }}</a></td>
+              <td>{{ program.admin }}</td>
+              <td>{{ program.department }}</td>
+              <td>
+                <a class="btn btn-warning btn-sm" href="{% url 'program-update' pk=program.name %}">Edit</a>
+                <a class="btn btn-danger btn-sm" href="{% url 'program-delete' pk=program.name %}">Delete</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No programs have been added yet.</p>
+    {% endif %}
+  </div>
+{% endblock %}
