@@ -7,7 +7,7 @@ class Department(models.Model):
     dept_code = models.CharField(_("Code"), max_length=4, unique=True, primary_key=True, validators=[MinLengthValidator(1)])
 
     def __str__(self):
-        return f"{self.dept_code} {self.name}"
+        return f"{self.name}"
 
     class Meta:
         verbose_name = _('Department')

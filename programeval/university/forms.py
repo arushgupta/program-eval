@@ -9,12 +9,12 @@ class DepartmentForm(forms.ModelForm):
 class AddFacultyForm(forms.ModelForm):
     class Meta:
         model = Faculty
-        fields = '__all__'
+        exclude = ('is_active', )
 
 class UpdateFacultyForm(forms.ModelForm):
     class Meta:
         model = Faculty
-        fields = '__all__'
+        exclude = ('is_active', )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

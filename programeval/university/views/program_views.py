@@ -3,7 +3,7 @@ from university.models import Program
 from university.forms import ProgramForm
 
 def program_list(request):
-    programs = Program.objects.all()
+    programs = Program.objects.all().order_by('name')
     return render(request, 'university/program/list.html', {'programs': programs})
 
 def program_detail(request, pk):

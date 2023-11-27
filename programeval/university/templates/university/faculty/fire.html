@@ -3,10 +3,28 @@
 
 {% block content %}
 <h2>Fire a Staff Member</h2>
-<p>Are you sure you want to fire <bold>{{ faculty.name }}</bold> with University ID {{ faculty.uni_id }} working in the {{ faculty.department.name }}?</p>
-<form method="post" action="">
+
+<p>Are you sure you want to fire <strong>{{ faculty.name }}</strong> with University ID <strong>{{ faculty.uni_id }}</strong> working in the <strong>{{ faculty.department.name }}</strong>?</p>
+
+{% if faculty.prog_admin.all %}
+  <p><strong>Warning:</strong> This faculty member is the admin for the following program(s):</p>
+  <ul>
+    {% for program in faculty.prog_admin.all %}
+      <li>
+        {{ program.name }}
+        <a href="{% url 'program-update' program.name %}">Update Program Admin</a>
+      </li>
+    {% endfor %}
+  </ul>
+  <br>
+  <p>Please change the admin for these programs before firing the faculty.</p>
+{% else %}
+  <form method="post" action="{% url 'fire-faculty' faculty.uni_id %}">
     {% csrf_token %}
-    <button class="btn btn-danger" type="submit">Fire</button>
+    <input class="btn btn-danger" type="submit" value="Fire">
   </form>
+  {% endif %}
+  <br>
   <a href="{% url 'faculty-list' %}">Back to faculty list</a>
+
 {% endblock %}
