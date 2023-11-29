@@ -36,7 +36,7 @@ class Faculty(models.Model):
 
 class Program(models.Model):
     name = models.CharField(_("Name"), max_length=100, unique=True, primary_key=True)
-    admin = models.ForeignKey(Faculty, on_delete=models.PROTECT, related_name='prog_admin')
+    admin = models.ForeignKey(Faculty, on_delete=models.SET_NULL, related_name='prog_admin',null=True)
     department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='prog_dept')
 
     def __str__(self):
