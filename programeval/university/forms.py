@@ -1,5 +1,5 @@
 from django import forms
-from university.models import Department, Faculty, Program
+from university.models import Department, Faculty, Program,Course
 
 class DepartmentForm(forms.ModelForm):
     class Meta:
@@ -29,3 +29,8 @@ class ProgramForm(forms.ModelForm):
         self.admin = Faculty.objects.filter(is_active=True).order_by('uni_id')
         super().__init__(*args, **kwargs)
         self.fields["admin"].queryset = self.admin
+
+class CourseForm(forms.ModelForm):
+    class Meta:
+        model=Course
+        fields=['course_id','dept','title','description']
