@@ -23,4 +23,9 @@ urlpatterns = [
     path('courses/<str:course_id>/<str:dept_id>/',views.course_detail,name='course-detail'),
     path('courses/<str:course_id>/<str:dept_id>/change/', views.course_update, name='course-update'),
     path('courses/<str:course_id>/<str:dept_id>/remove/', views.course_delete, name='course-delete'),
+    path('programs/<str:program_id>/courses/',views.programcourse_list,name='programcourse-list'),
+    path('programs/<str:program_id>/courses/add/',views.programcourse_create,name='programcourse-add'),
+    # path('programs/<str:program_id>/courses/<str:course_id>/change/',views.programcourse_update,name='programcourse-update'),
+    path('programs/<str:program_id>/courses/<str:course_id>/remove/',views.programcourse_delete,name='programcourse-delete'),
+    
 ]
