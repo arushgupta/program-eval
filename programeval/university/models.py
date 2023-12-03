@@ -39,8 +39,8 @@ class Program(models.Model):
     admin = models.ForeignKey(Faculty, on_delete=models.SET_NULL, related_name='prog_admin',null=True)
     department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='prog_dept')
 
-    def __str__(self):
-        return f"{self.name}: {self.department.name}"
+    # def __str__(self):
+    #     return f"{self.name}: {self.department.name}"
 
     class Meta:
         verbose_name = _('Program')
@@ -57,11 +57,13 @@ class Course(models.Model):
         verbose_name_plural = _('Courses')
         unique_together = ('course_id', 'dept')
 
+    def __str__(self):
+        return f"{self.dept.dept_code+self.course_id}"
+
 # Junction Table to allow for many-to-many relation between Course and Program
 class ProgramCourse(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='course')
     program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='program')
-
     class Meta:
         unique_together = ('course', 'program')
 
