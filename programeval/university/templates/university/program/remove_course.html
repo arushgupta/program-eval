@@ -1,0 +1,22 @@
+<!-- delete_department.html -->
+
+{% extends 'university/base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2>Delete a Course</h2>
+
+    <div class="mt-4">
+      <h6>Are you sure you want to remove the course with <strong>{{ program_course.course.dept.dept_code }}{{ program_course.course.course_id }}</strong> from <strong>{{program_course.program_id}}</strong>?</h6>
+
+      <form method="post" action="">
+        {% csrf_token %}
+        <button class="btn btn-danger mt-3" type="submit">Remove</button>
+      </form>
+
+      <div class="mt-3">
+        <a href="{% url 'program_course-list' program_id=program_course.program.name %}" class="btn btn-secondary">Back to courses</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

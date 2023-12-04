@@ -22,5 +22,7 @@
       {% endfor %}
     <button class="btn btn-primary" type="submit">Save</button>
   </form>
-  <a href="{% url 'program-list' %}">Back to programs</a>
+  <div class="mt-4">
+    <a href="{% url 'program-list' %}" class="btn btn-secondary">Back to Programs</a>
+  </div>
 {% endblock %}

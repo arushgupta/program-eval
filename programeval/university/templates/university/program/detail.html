@@ -2,9 +2,46 @@
 {% extends 'university/base.html' %}
 
 {% block content %}
-  <h2>Program Details</h2>
-  <p>Program: {{ program.name }}</p>
-  <p>Program Head: {{ program.admin }}</p>
-  <p>Department: {{ program.department }}</p>
-  <a href="{% url 'program-list' %}">Back to programs</a>
+  <div class="container mt-5">
+    <h2>Program Details</h2>
+    <p><strong>Program:</strong> {{ program.name }}</p>
+    <p><strong>Program Head:</strong> {{ program.admin.name }}</p>
+    <p><strong>Department:</strong> {{ program.department }}</p>
+
+    <div class="container mt-4">
+      <div>
+        <h2>Courses</h2>
+        <a class="btn btn-primary mb-2" href="{% url 'program_course-add' program_id=program.name %}">Add Courses</a>
+      </div>
+
+      {% if program_courses %}
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Code</th>
+              <th scope="col">Title</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for course in program_courses %}
+              <tr>
+                <td>{{ course.course.dept_id }}{{ course.course.course_id }}</td>
+                <td>{{ course.course.title }}</td>
+                <td>
+                  <a class="btn btn-danger btn-sm" href="{% url 'program_course-delete' program_id=program.name course_id=course.course_id %}">Delete</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>No courses have been added yet.</p>
+      {% endif %}
+    </div>
+
+    <div class="mt-3">
+      <a href="{% url 'program-list' %}" class="btn btn-secondary">Back to Programs</a>
+    </div>
+  </div>
 {% endblock %}

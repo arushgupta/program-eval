@@ -3,4 +3,3 @@ from university.views.department_views import *
 from university.views.faculty_views import *
 from university.views.program_views import *
 from university.views.course_views import *
-from university.views.programcourse_views import *

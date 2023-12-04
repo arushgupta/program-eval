@@ -30,18 +30,28 @@ class ProgramForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["admin"].queryset = self.admin
 
-class CourseForm(forms.ModelForm):
+class AddCourseForm(forms.ModelForm):
     class Meta:
-        model=Course
-        fields=['course_id','dept','title','description']
+        model = Course
+        fields = ['dept','course_id','title','description']
+
+class UpdateCourseForm(forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = ['dept','course_id','title','description']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["dept"].disabled = True
 
 class ProgramCourseForm(forms.ModelForm):
     class Meta:
-        model=ProgramCourse
-        fields=['course','program']
+        model = ProgramCourse
+        fields = ['program', 'course']
         
-    def __init__(self, *args, **kwargs):
+    def __init__(self, department, program, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.fields["program"].disabled = True
-        # self.fields["course"].queryset = ProgramCourse.objects.filter(program_id=program_id)
+        self.fields["program"].initial = program
+        self.fields["program"].disabled = True
+        self.fields["course"].queryset = Course.objects.filter(dept=department)
 
