@@ -1,9 +1,18 @@
 from django.shortcuts import render
 
+from university.models import Course, Department, Faculty, Program
+
 # Create your views here.
 def home(request):
+    departments = Department.objects.all().count()
+    programs = Program.objects.all().count()
+    faculty = Faculty.objects.filter(is_active=True).count()
+    courses = Course.objects.all().count()
+
     context = {
-        'programs': "Programs",
-        'departments': "Departments"
+        'departments': departments,
+        'programs': programs,
+        'faculty': faculty,
+        'courses': courses
     }
     return render(request, 'university/home.html', context)

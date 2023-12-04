@@ -18,7 +18,7 @@
     <br>
 
     <h4>Active Faculty</h4>
-    <ul>
+    <ol>
       {% for faculty in department.faculty_dept.all %}
         {% if faculty.is_active %}
           <li>
@@ -33,18 +33,18 @@
           </li>
         {% endif %}
       {% endfor %}
-    </ul>
+    </ol>
 
     <br>
 
     <h4>Fired/Inactive Faculty</h4>
-    <ul>
+    <ol>
       {% for faculty in department.faculty_dept.all %}
         {% if not faculty.is_active %}
           <li>{{ faculty.name }} - Rank: {{ faculty.get_rank_display }}</li>
         {% endif %}
       {% endfor %}
-    </ul>
+    </ol>
 
     <br>
 

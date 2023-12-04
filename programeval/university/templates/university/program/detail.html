@@ -26,7 +26,7 @@
           <tbody>
             {% for course in program_courses %}
               <tr>
-                <td>{{ course.course.dept_id }}{{ course.course.course_id }}</td>
+                <td><a href="{% url 'course-detail' dept_id=course.course.dept_id course_id=course.course.course_id %}">{{ course.course.dept_id }}{{ course.course.course_id }}</a></td>
                 <td>{{ course.course.title }}</td>
                 <td>
                   <a class="btn btn-danger btn-sm" href="{% url 'program_course-delete' program_id=program.name course_id=course.course_id %}">Delete</a>

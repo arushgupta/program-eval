@@ -1,5 +1,5 @@
 from django import forms
-from university.models import Department, Faculty, Program,Course,ProgramCourse
+from university.models import Department, Faculty, Program,Course,ProgramCourse, Section
 
 class DepartmentForm(forms.ModelForm):
     class Meta:
@@ -55,3 +55,25 @@ class ProgramCourseForm(forms.ModelForm):
         self.fields["program"].disabled = True
         self.fields["course"].queryset = Course.objects.filter(dept=department)
 
+class AddSectionForm(forms.ModelForm):
+    class Meta:
+        model = Section
+        fields = ['course', 'section_id', 'semester', 'year', 'prof', 'enrolled']
+
+    def __init__(self, department, course, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["course"].initial = Course.objects.get(course_id=course, dept_id=department)
+        self.fields["course"].disabled = True
+        self.fields["prof"].queryset = Faculty.objects.filter(department_id=department, is_active=True)
+        self.fields["prof"].label = "Professor"
+
+class UpdateSectionForm(forms.ModelForm):
+    class Meta:
+        model = Section
+        fields = ['course', 'section_id', 'semester', 'year', 'prof', 'enrolled']
+    
+    def __init__(self, department, course, section, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["course"].disabled = True
+        self.fields["prof"].queryset = Faculty.objects.filter(department_id=department, is_active=True)
+        self.fields["prof"].label = "Professor"
