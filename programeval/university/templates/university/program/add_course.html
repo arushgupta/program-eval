@@ -1,10 +1,10 @@
-<!-- add_department.html -->
+<!-- add_course.html -->
 
 {% extends 'university/base.html' %}
 
 {% block content %}
   <div class="container mt-5">
-    <h2 class="mb-4">Add a New Course</h2>
+    <h2 class="mb-4">Add Course</h2>
 
     <form method="post" action="" novalidate>
       {% csrf_token %}
@@ -26,7 +26,7 @@
     </form>
 
     <div class="mt-4">
-        <a href="{% url 'programcourse-list' program_id=program %}">Back to programs</a>
+        <a href="{% url 'program-detail' pk=program %}" class="btn btn-secondary">Back to programs</a>
     </div>
   </div>
 {% endblock %} 

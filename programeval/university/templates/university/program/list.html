@@ -28,7 +28,6 @@
               <td>
                 <a class="btn btn-warning btn-sm" href="{% url 'program-update' pk=program.name %}">Edit</a>
                 <a class="btn btn-danger btn-sm" href="{% url 'program-delete' pk=program.name %}">Delete</a>
-                <a class="btn btn-danger btn-sm" href="{% url 'programcourse-list' program_id=program.name %}">Courses</a>
               </td>
             </tr>
           {% endfor %}

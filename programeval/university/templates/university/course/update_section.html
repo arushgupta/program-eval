@@ -1,10 +1,10 @@
-<!-- create_course.html -->
+<!-- update_section.html -->
 
 {% extends 'university/base.html' %}
 
 {% block content %}
   <div class="container mt-5">
-    <h2 class="mb-4">Add a New Course</h2>
+    <h2 class="mb-4">Update Section</h2>
 
     <form method="post" action="" novalidate>
       {% csrf_token %}
@@ -23,11 +23,12 @@
           {% endif %}
         </div>
       {% endfor %}
-      <button class="btn btn-primary mt-3" type="submit">Save</button>
+
+      <button class="btn btn-warning mt-3" type="submit" value="Update">Update</button>
     </form>
 
     <div class="mt-4">
-      <a href="{% url 'course-list' %}" class="btn btn-secondary">Back to Courses</a>
+        <a href="{% url 'course-detail' course_id=course_id dept_id=dept_id %}" class="btn btn-secondary">Back to {{ dept_id }}{{ course_id }}</a>
     </div>
   </div>
 {% endblock %}

@@ -1,0 +1,22 @@
+<!-- remove_section.html -->
+
+{% extends 'university/base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2>Delete a Course</h2>
+
+    <div class="mt-4">
+      <h6>Are you sure you want to delete the {{ section.get_semester_display }} {{ section.year }} section <strong>{{ section.section_id }}</strong> of <strong>{{ section.course.dept.dept_code }}{{ section.course.course_id }}</strong>?</h6>
+
+      <form method="post" action="">
+        {% csrf_token %}
+        <button class="btn btn-danger mt-3" type="submit">Remove</button>
+      </form>
+
+      <div class="mt-3">
+        <a href="{% url 'course-detail' course_id=section.course.course_id dept_id=section.course.dept.dept_code %}" class="btn btn-secondary">Back to {{ section.course.dept.dept_code }}{{ section.course.course_id }}</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

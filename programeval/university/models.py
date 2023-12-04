@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinLengthValidator, MinValueValidator
+from datetime import datetime
 
 class Department(models.Model):
     name = models.CharField(_("Name"), max_length=50, unique=True)
@@ -39,8 +40,8 @@ class Program(models.Model):
     admin = models.ForeignKey(Faculty, on_delete=models.SET_NULL, related_name='prog_admin',null=True)
     department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='prog_dept')
 
-    # def __str__(self):
-    #     return f"{self.name}: {self.department.name}"
+    def __str__(self):
+        return f"{self.name}"
 
     class Meta:
         verbose_name = _('Program')
@@ -58,12 +59,13 @@ class Course(models.Model):
         unique_together = ('course_id', 'dept')
 
     def __str__(self):
-        return f"{self.dept.dept_code+self.course_id}"
+        return f"{self.dept.dept_code}{self.course_id}"
 
 # Junction Table to allow for many-to-many relation between Course and Program
 class ProgramCourse(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='course')
     program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='program')
+    
     class Meta:
         unique_together = ('course', 'program')
 
@@ -73,9 +75,13 @@ class Section(models.Model):
         SPRING = 2, _('Spring')
         SUMMER = 3, _('Summer')
 
+    years = []
+    for y in range(2010, (datetime.now().year + 5)):
+        years.append((y, y))
+
     section_id = models.CharField(_('Section ID'), max_length=3, validators=[MinLengthValidator(3)])
     semester = models.PositiveSmallIntegerField(_('Semester'), choices=Semester.choices, default=Semester.FALL)
-    year = models.CharField(_('Year'), max_length=4, validators=[MinLengthValidator(4)])
+    year = models.PositiveSmallIntegerField(_('Year'), choices=years, default=datetime.now().year)
     prof = models.ForeignKey(Faculty, on_delete=models.CASCADE, related_name='section_prof')
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='section_course')
     enrolled = models.PositiveIntegerField(_('Enrolled Students'), default=0, validators=[MinValueValidator(0)])
@@ -83,7 +89,7 @@ class Section(models.Model):
     class Meta:
         verbose_name = _('Section')
         verbose_name_plural = _('Sections')
-        unique_together = ('section_id', 'course')
+        unique_together = ('section_id', 'course', 'semester', 'year')
 
 class LearningObjective(models.Model):
     code = models.CharField(_("LO code"), max_length=10, validators=[MinLengthValidator(3)], unique=True)

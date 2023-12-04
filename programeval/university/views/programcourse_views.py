@@ -16,7 +16,7 @@ def programcourse_create(request,program_id):
     return render(request,'university/ProgramCourse/programcourse_create.html',{'form':form,'program':program_id})
 
 def programcourse_delete(request,program_id,course_id):
-    programcourse=get_object_or_404(ProgramCourse,program_id=program_id,course_id=course_id)
+    programcourse=get_object_or_404(ProgramCourse, program_id=program_id, course_id=course_id)
     if request.method=='POST':
         programcourse.delete()
         return redirect('programcourse-list',program_id=program_id)

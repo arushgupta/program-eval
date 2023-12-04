@@ -1,15 +1,14 @@
-<!-- update_department.html -->
+<!-- add_section.html -->
 
 {% extends 'university/base.html' %}
 
 {% block content %}
   <div class="container mt-5">
-    <h2 class="mb-4">Update Course</h2>
+    <h2 class="mb-4">Add Section</h2>
 
     <form method="post" action="" novalidate>
       {% csrf_token %}
       {{ form.non_field_errors }}
-
       {% for field in form %}
         <div class="form-group">
           {{ field.label_tag }}
@@ -23,16 +22,11 @@
           {% endif %}
         </div>
       {% endfor %}
-
-      <button class="btn btn-warning mt-3" type="submit" value="Update">Update</button>
+      <button class="btn btn-primary mt-3" type="submit">Save</button>
     </form>
 
     <div class="mt-4">
-      <form method="post" action="{% url 'programcourse-list' %}" style="display: inline;">
-        {% csrf_token %}
-        <input type="hidden" name="program_id" value="{{ program.name }}">
-        <button class="btn btn-danger mt-3" type="submit" class="btn btn-danger btn-sm">Courses</button>
-      </form>
+        <a href="{% url 'course-detail' course_id=course_id dept_id=dept_id %}" class="btn btn-secondary">Back to {{ dept_id }}{{ course_id }}</a>
     </div>
   </div>
-{% endblock %}
+{% endblock %} 
