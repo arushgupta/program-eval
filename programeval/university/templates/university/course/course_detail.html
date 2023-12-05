@@ -35,13 +35,13 @@
         <tbody>
           {% for section in sections %}
             <tr>
-              <td>{{ section.section_id }}</td>
+              <td>{{ section.code }}</td>
               <td>{{ section.get_semester_display }} {{ section.year }}</td>
               <td>{{ section.prof.name }}</td>
               <td>{{ section.enrolled }}</td>
               <td>
-                <a class="btn btn-warning btn-sm" href="{% url 'section-update' dept_id=course.dept.dept_code course_id=course.course_id section_id=section.section_id %}">Edit</a>
-                <a class="btn btn-danger btn-sm" href="{% url 'section-delete' dept_id=course.dept.dept_code course_id=course.course_id section_id=section.section_id %}">Delete</a>
+                <a class="btn btn-warning btn-sm" href="{% url 'section-update' dept_id=course.dept.dept_code course_id=course.course_id code=section.code semester=section.semester year=section.year %}">Edit</a>
+                <a class="btn btn-danger btn-sm" href="{% url 'section-delete' dept_id=course.dept.dept_code course_id=course.course_id code=section.code semester=section.semester year=section.year %}">Delete</a>
               </td>
             </tr>
           {% endfor %}

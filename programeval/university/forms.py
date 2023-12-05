@@ -6,6 +6,15 @@ class DepartmentForm(forms.ModelForm):
         model = Department
         fields = ['name', 'dept_code']
 
+class UpdateDepartmentForm(forms.ModelForm):
+    class Meta:
+        model = Department
+        fields = ['dept_code', 'name']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["dept_code"].disabled = True
+
 class AddFacultyForm(forms.ModelForm):
     class Meta:
         model = Faculty
@@ -34,6 +43,10 @@ class AddCourseForm(forms.ModelForm):
     class Meta:
         model = Course
         fields = ['dept','course_id','title','description']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["dept"].label = "Department"
 
 class UpdateCourseForm(forms.ModelForm):
     class Meta:
@@ -53,37 +66,39 @@ class ProgramCourseForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["program"].initial = program
         self.fields["program"].disabled = True
-        self.fields["course"].queryset = Course.objects.filter(dept=department)
 
 class AddSectionForm(forms.ModelForm):
     class Meta:
         model = Section
-        fields = ['course', 'section_id', 'semester', 'year', 'prof', 'enrolled']
+        fields = ['course', 'code', 'semester', 'year', 'prof', 'enrolled']
 
     def __init__(self, department, course, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["course"].initial = Course.objects.get(course_id=course, dept_id=department)
         self.fields["course"].disabled = True
-        self.fields["prof"].queryset = Faculty.objects.filter(department_id=department, is_active=True)
+        self.fields["prof"].queryset = Faculty.objects.filter(is_active=True)
         self.fields["prof"].label = "Professor"
 
 class UpdateSectionForm(forms.ModelForm):
     class Meta:
         model = Section
-        fields = ['course', 'section_id', 'semester', 'year', 'prof', 'enrolled']
+        fields = ['course', 'code', 'semester', 'year', 'prof', 'enrolled']
     
     def __init__(self, department, course, section, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        import pdb; pdb.set_trace()
         self.fields["course"].initial = course
         self.fields["course"].disabled = True
-        self.fields["prof"].queryset = Faculty.objects.filter(department_id=department, is_active=True)
+        self.fields["prof"].queryset = Faculty.objects.filter(is_active=True)
         self.fields["prof"].label = "Professor"
 
 class AddObjectiveForm(forms.ModelForm):
     class Meta:
         model = Objective
-        fields = ['code', 'title']
+        fields = ['title', 'code']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["code"].label = "Code"
 
 class UpdateObjectiveForm(forms.ModelForm):
     class Meta:

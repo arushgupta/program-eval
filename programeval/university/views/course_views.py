@@ -8,7 +8,7 @@ def course_list(request):
 
 def course_detail(request, dept_id, course_id):
     course = get_object_or_404(Course, course_id=course_id, dept_id=dept_id)
-    sections = Section.objects.filter(course=course)
+    sections = Section.objects.filter(course=course).order_by('semester', 'year', 'code')
     return render(request, 'university/course/course_detail.html', {'course': course, 'sections': sections})
 
 def course_create(request):
@@ -49,11 +49,11 @@ def add_section(request, dept_id, course_id):
         form = AddSectionForm(dept_id, course_id)
     return render(request, 'university/course/add_section.html', {'form': form, 'dept_id': dept_id, 'course_id': course_id})
 
-def update_section(request, dept_id, course_id, section_id):
+def update_section(request, dept_id, course_id, code, semester, year):
     course = get_object_or_404(Course, course_id=course_id, dept_id=dept_id)
-    section = get_object_or_404(Section, course=course, section_id=section_id)
+    section = get_object_or_404(Section, course=course, code=code, semester=semester, year=year)
     if request.method == 'POST':
-        form = UpdateSectionForm(dept_id, course, section, request.POST)
+        form = UpdateSectionForm(dept_id, course, section, request.POST, instance=section)
         if form.is_valid():
             form.save()
             return redirect('course-detail', dept_id, course_id)
@@ -61,9 +61,9 @@ def update_section(request, dept_id, course_id, section_id):
         form = UpdateSectionForm(dept_id, course, section, instance=section)
     return render(request, 'university/course/update_section.html', {'form': form, 'dept_id': dept_id, 'course_id': course_id})
 
-def remove_section(request, dept_id, course_id, section_id):
+def remove_section(request, dept_id, course_id, code, semester, year):
     course = get_object_or_404(Course, course_id=course_id, dept_id=dept_id)
-    section = get_object_or_404(Section, course=course, section_id=section_id)
+    section = get_object_or_404(Section, course=course, code=code, semester=semester, year=year)
     if request.method == 'POST':
         section.delete()
         return redirect('course-detail', dept_id, course_id)

@@ -7,7 +7,7 @@
     <h2>Delete a Course</h2>
 
     <div class="mt-4">
-      <h6>Are you sure you want to delete the {{ section.get_semester_display }} {{ section.year }} section <strong>{{ section.section_id }}</strong> of <strong>{{ section.course.dept.dept_code }}{{ section.course.course_id }}</strong>?</h6>
+      <h6>Are you sure you want to delete the {{ section.get_semester_display }} {{ section.year }} section <strong>{{ section.code }}</strong> of <strong>{{ section.course.dept.dept_code }}{{ section.course.course_id }}</strong>?</h6>
 
       <form method="post" action="">
         {% csrf_token %}
