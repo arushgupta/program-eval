@@ -79,3 +79,13 @@ class UpdateSectionForm(forms.ModelForm):
         self.fields["course"].disabled = True
         self.fields["prof"].queryset = Faculty.objects.filter(department_id=department, is_active=True)
         self.fields["prof"].label = "Professor"
+
+class AddObjectiveForm(forms.ModelForm):
+    class Meta:
+        model = Objective
+        fields = ['code', 'title']
+
+class UpdateObjectiveForm(forms.ModelForm):
+    class Meta:
+        model = Objective
+        fields = ['title']

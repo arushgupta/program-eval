@@ -35,6 +35,7 @@ class Faculty(models.Model):
         verbose_name = _('Faculty')
         verbose_name_plural = _('Faculty Members')
 
+
 class Program(models.Model):
     name = models.CharField(_("Name"), max_length=100, unique=True, primary_key=True)
     admin = models.ForeignKey(Faculty, on_delete=models.SET_NULL, related_name='prog_admin',null=True)
@@ -91,18 +92,47 @@ class Section(models.Model):
         verbose_name_plural = _('Sections')
         unique_together = ('section_id', 'course', 'semester', 'year')
 
-class LearningObjective(models.Model):
-    code = models.CharField(_("Code"), max_length=6, validators=[MinLengthValidator(3)], unique=True)
+
+class Objective(models.Model):
+    code = models.CharField(_("LO code"), max_length=4, validators=[MinLengthValidator(3)], primary_key=True)
     title = models.CharField(_("Title"), max_length=50)
 
+    def __str__(self):
+        return self.title
+
 class SubObjective(models.Model):
-    code = models.IntegerField(_("SO Code"))
+    code = models.CharField(_("SO Code"), max_length=4, validators=[MinLengthValidator(3)], primary_key=True)
     description = models.TextField(_("SO Description"))
-    learning_objective = models.ForeignKey(LearningObjective, on_delete=models.CASCADE, related_name='so_learning_objective')
+    objective = models.ForeignKey(Objective, on_delete=models.CASCADE, related_name='subobjectives')
+
+    def __str__(self):
+        return self.description
 
 class ProgramCourseObjective(models.Model):
-    program_course = models.ForeignKey(ProgramCourse, on_delete=models.CASCADE, related_name='pco_pc_pair')
-    objective = models.ForeignKey(SubObjective, on_delete=models.CASCADE, null=True, related_name='pco_sub_objective')
+    program_course = models.ForeignKey(ProgramCourse, on_delete=models.CASCADE, related_name='objectives')
+    objective = models.ForeignKey(Objective, on_delete=models.CASCADE, related_name='program_courses')
+    evaluation_method = models.CharField(_("Evaluation Method"), max_length=50)
+
+    def __str__(self):
+        return f"{self.program_course} - {self.objective}"
+
+    class Meta:
+        verbose_name = _("Program Course Objective")
+        verbose_name_plural = _("Program Course Objectives")
+        unique_together = ('program_course', 'objective')
+
+class SectionObjectiveEvaluation(models.Model):
+    section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='objective_evaluations')
+    program_course_objective = models.ForeignKey(ProgramCourseObjective, on_delete=models.CASCADE, related_name='section_evaluations')
+    students_met = models.PositiveIntegerField(_("Number of Students Met"), default=0)
+
+    def __str__(self):
+        return f"{self.section} - {self.program_course_objective}"
+
+    class Meta:
+        verbose_name = _("Section Objective Evaluation")
+        verbose_name_plural = _("Section Objective Evaluations")
+        unique_together = ('section', 'program_course_objective')
 
 # TODO: Create a table that links Section and Subobjective
 # class Evaluation(models.Model):
