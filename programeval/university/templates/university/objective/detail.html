@@ -1,0 +1,42 @@
+<!-- objective_detail.html -->
+{% extends 'university/base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2>Objective Details</h2>
+    <p><strong>Objective Code:</strong> {{ objective.code }}</p>
+    <p><strong>Objective Title:</strong> {{ objective.title }}</p>
+
+    <div class="container mt-4">
+      <div>
+        <h2>Courses</h2>
+        <a class="btn btn-primary mb-2" href="{% url 'assign-objective-to-course' objective_id=objective.code %}">Assign to Course</a>
+      </div>
+
+      {% if courses %}
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Course Code</th>
+              <th scope="col">Course Title</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for course in courses %}
+              <tr>
+                <td><a href="{% url 'course-detail' course_id=course.course_id %}">{{ course.dept.dept_code }}{{ course.course_id }}</a></td>
+                <td>{{ course.title }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>No courses have been assigned to this objective yet.</p>
+      {% endif %}
+    </div>
+
+    <div class="mt-3">
+      <a href="{% url 'objective-list' %}" class="btn btn-secondary">Back to Objectives</a>
+    </div>
+  </div>
+{% endblock %}
