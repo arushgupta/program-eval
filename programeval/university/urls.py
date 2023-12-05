@@ -28,4 +28,10 @@ urlpatterns = [
     path('courses/<str:dept_id>/<str:course_id>/sections/add', views.add_section, name='section-add'),
     path('courses/<str:dept_id>/<str:course_id>/<str:section_id>/change/', views.update_section, name='section-update'),
     path('courses/<str:dept_id>/<str:course_id>/<str:section_id>/remove', views.remove_section, name='section-delete'),
+    path('objectives/', views.objective_list, name='objective-list'),
+    path('objectives/<str:pk>/', views.objective_detail, name='objective-detail'),
+    path('objectives/add/', views.objective_create, name='objective-add'),
+    path('objectives/<str:pk>/update/', views.objective_update, name='objective-update'),
+    path('objectives/<str:pk>/delete/', views.objective_delete, name='objective-delete'),
+    path('courses/<str:course_id>/assign-objective/', views.assign_objective_to_course, name='assign-objective-to-course')
 ]

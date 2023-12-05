@@ -1,0 +1,35 @@
+{% extends 'university/base.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <div>
+      <h2>Objectives</h2>
+    </div>
+
+    {% if objectives %}
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Code</th>
+            <th scope="col">Title</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for objective in objectives %}
+            <tr>
+              <td><a href="#">{{ objective.code }}</a></td>
+              <td><a href="#">{{ objective.title }}</a></td>
+              <td>
+                <a class="btn btn-warning btn-sm" href="#">Edit</a>
+                <a class="btn btn-danger btn-sm" href="#">Delete</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No objectives have been added yet.</p>
+    {% endif %}
+  </div>
+{% endblock %}
