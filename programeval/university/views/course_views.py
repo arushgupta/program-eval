@@ -58,7 +58,7 @@ def update_section(request, dept_id, course_id, section_id):
             form.save()
             return redirect('course-detail', dept_id, course_id)
     else:
-        form = UpdateSectionForm(dept_id, course_id, section_id, instance=section)
+        form = UpdateSectionForm(dept_id, course, section, instance=section)
     return render(request, 'university/course/update_section.html', {'form': form, 'dept_id': dept_id, 'course_id': course_id})
 
 def remove_section(request, dept_id, course_id, section_id):

@@ -92,17 +92,17 @@ class Section(models.Model):
         unique_together = ('section_id', 'course', 'semester', 'year')
 
 class LearningObjective(models.Model):
-    code = models.CharField(_("LO code"), max_length=10, validators=[MinLengthValidator(3)], unique=True)
+    code = models.CharField(_("Code"), max_length=6, validators=[MinLengthValidator(3)], unique=True)
     title = models.CharField(_("Title"), max_length=50)
 
 class SubObjective(models.Model):
     code = models.IntegerField(_("SO Code"))
     description = models.TextField(_("SO Description"))
-    lo = models.ForeignKey(LearningObjective, on_delete=models.CASCADE, related_name='so_lo')
+    learning_objective = models.ForeignKey(LearningObjective, on_delete=models.CASCADE, related_name='so_learning_objective')
 
 class ProgramCourseObjective(models.Model):
-    programcourse = models.ForeignKey(ProgramCourse, on_delete=models.CASCADE, related_name='pco_pc_pair')
-    objective = models.ForeignKey(SubObjective, on_delete=models.CASCADE, related_name='pco_objective')
+    program_course = models.ForeignKey(ProgramCourse, on_delete=models.CASCADE, related_name='pco_pc_pair')
+    objective = models.ForeignKey(SubObjective, on_delete=models.CASCADE, null=True, related_name='pco_sub_objective')
 
 # TODO: Create a table that links Section and Subobjective
 # class Evaluation(models.Model):
