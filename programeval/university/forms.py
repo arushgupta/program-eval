@@ -1,5 +1,5 @@
 from django import forms
-from university.models import Department, Faculty, Program,Course,ProgramCourse, Section, Objective
+from university.models import Department, Faculty, Program, Course, ProgramCourse, Section
 
 class DepartmentForm(forms.ModelForm):
     class Meta:
@@ -74,6 +74,8 @@ class UpdateSectionForm(forms.ModelForm):
     
     def __init__(self, department, course, section, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        import pdb; pdb.set_trace()
+        self.fields["course"].initial = course
         self.fields["course"].disabled = True
         self.fields["prof"].queryset = Faculty.objects.filter(department_id=department, is_active=True)
         self.fields["prof"].label = "Professor"

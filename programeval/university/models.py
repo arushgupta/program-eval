@@ -92,6 +92,7 @@ class Section(models.Model):
         verbose_name_plural = _('Sections')
         unique_together = ('section_id', 'course', 'semester', 'year')
 
+
 class Objective(models.Model):
     code = models.CharField(_("LO code"), max_length=4, validators=[MinLengthValidator(3)], primary_key=True)
     title = models.CharField(_("Title"), max_length=50)
