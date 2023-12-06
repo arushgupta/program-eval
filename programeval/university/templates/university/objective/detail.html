@@ -8,10 +8,11 @@
     <p><strong>Objective Title:</strong> {{ objective.title }}</p>
 
     <div class="container mt-4">
-      <div>
-        <h2>Sub-Objectives</h2>
-        <a class="btn btn-primary mb-2" href="{% url 'sub_objective-add' code=objective.code %}">Add Sub-Objectives</a>
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">Sub-Objectives</h2>
+        <a class="btn btn-primary mb-1" href="{% url 'sub_objective-add' code=objective.code %}">Add Sub-Objectives</a>
       </div>
+      <br>
 
       {% if sub_objectives %}
         <table class="table table-striped">
@@ -25,11 +26,11 @@
           <tbody>
             {% for sub_objective in sub_objectives %}
               <tr>
-                <td>{{ sub_objective.code }}</td>
+                <td>{{ objective.code }}.{{ sub_objective.pk }}</td>
                 <td>{{ sub_objective.description }}</td>
                 <td>
-                  <a class="btn btn-warning btn-sm" href="{% url 'sub_objective-update' o_code=objective.code s_code=sub_objective.code %}">Edit</a>
-                  <a class="btn btn-danger btn-sm" href="{% url 'sub_objective-delete' o_code=objective.code s_code=sub_objective.code %}">Delete</a>
+                  <a class="btn btn-warning btn-sm" href="{% url 'sub_objective-update' o_code=objective.code s_code=sub_objective.pk %}">Edit</a>
+                  <a class="btn btn-danger btn-sm" href="{% url 'sub_objective-delete' o_code=objective.code s_code=sub_objective.pk %}">Delete</a>
                 </td>
               </tr>
             {% endfor %}

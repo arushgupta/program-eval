@@ -1,0 +1,62 @@
+[
+{
+    "model": "university.section",
+    "pk": 1,
+    "fields": {
+        "code": "003",
+        "semester": 1,
+        "year": 2023,
+        "prof": "0002",
+        "course": 1,
+        "enrolled": 10
+    }
+},
+{
+    "model": "university.section",
+    "pk": 2,
+    "fields": {
+        "code": "002",
+        "semester": 1,
+        "year": 2023,
+        "prof": "0006",
+        "course": 1,
+        "enrolled": 10
+    }
+},
+{
+    "model": "university.section",
+    "pk": 3,
+    "fields": {
+        "code": "001",
+        "semester": 3,
+        "year": 2023,
+        "prof": "0002",
+        "course": 1,
+        "enrolled": 10
+    }
+},
+{
+    "model": "university.section",
+    "pk": 4,
+    "fields": {
+        "code": "002",
+        "semester": 3,
+        "year": 2023,
+        "prof": "0007",
+        "course": 1,
+        "enrolled": 10
+    }
+},
+{
+    "model": "university.section",
+    "pk": 5,
+    "fields": {
+        "code": "001",
+        "semester": 1,
+        "year": 2023,
+        "prof": "0002",
+        "course": 2,
+        "enrolled": 10
+    }
+}
+]
