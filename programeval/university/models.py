@@ -94,19 +94,28 @@ class Section(models.Model):
 
 
 class Objective(models.Model):
-    code = models.CharField(_("LO code"), max_length=4, validators=[MinLengthValidator(3)], primary_key=True)
+    code = models.CharField(_("Objective Code"), max_length=5, validators=[MinLengthValidator(3)], primary_key=True)
     title = models.CharField(_("Title"), max_length=50)
 
     def __str__(self):
         return self.title
 
+    class Meta:
+        verbose_name = _('Objective')
+        verbose_name_plural = _('Objectives')
+
 class SubObjective(models.Model):
-    code = models.CharField(_("SO Code"), max_length=4, validators=[MinLengthValidator(3)], primary_key=True)
-    description = models.TextField(_("SO Description"))
-    objective = models.ForeignKey(Objective, on_delete=models.CASCADE, related_name='subobjectives')
+    code = models.CharField(_("Sub-Objective Code"), max_length=5, validators=[MinLengthValidator(3)], primary_key=True)
+    description = models.TextField(_("Description"))
+    objective = models.ForeignKey(Objective, on_delete=models.CASCADE, related_name='so_objectives')
 
     def __str__(self):
-        return self.description
+        return f"{self.objective.code} - {self.code}"
+    
+    class Meta:
+        verbose_name = _('Sub-Objective')
+        verbose_name_plural = _('Sub-Objectives')
+        unique_together = ('code', 'objective')
 
 class ProgramCourseObjective(models.Model):
     program_course = models.ForeignKey(ProgramCourse, on_delete=models.CASCADE, related_name='objectives')

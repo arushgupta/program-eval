@@ -35,6 +35,7 @@ urlpatterns = [
     path('courses/<str:dept_id>/<str:course_id>/', views.course_detail, name='course-detail'),
     path('courses/<str:dept_id>/<str:course_id>/change/', views.course_update, name='course-update'),
     path('courses/<str:dept_id>/<str:course_id>/remove/', views.course_delete, name='course-delete'),
+    # path('courses/<str:course_id>/assign-objective/', views.assign_objective_to_course, name='assign-objective-to-course'),
     
     # Add/Update/Delete Section
     path('courses/<str:dept_id>/<str:course_id>/sections/add/', views.add_section, name='section-add'),
@@ -44,8 +45,12 @@ urlpatterns = [
     # Objectives
     path('objectives/', views.objective_list, name='objective-list'),
     path('objectives/add/', views.objective_create, name='objective-add'),
-    path('objectives/<str:pk>/', views.objective_detail, name='objective-detail'),
-    path('objectives/<str:pk>/update/', views.objective_update, name='objective-update'),
-    path('objectives/<str:pk>/delete/', views.objective_delete, name='objective-delete'),
-    path('courses/<str:course_id>/assign-objective/', views.assign_objective_to_course, name='assign-objective-to-course')
+    path('objectives/<str:code>/', views.objective_detail, name='objective-detail'),
+    path('objectives/<str:code>/change/', views.objective_update, name='objective-update'),
+    path('objectives/<str:code>/remove/', views.objective_delete, name='objective-delete'),
+
+    # Sub-Objectives
+    path('objectives/<str:code>/sub/add/', views.add_sub_objective, name='sub_objective-add'),
+    path('objectives/<str:o_code>/<str:s_code>/change/', views.update_sub_objective, name='sub_objective-update'),
+    path('objectives/<str:o_code>/<str:s_code>/remove/', views.delete_sub_objective, name='sub_objective-delete'),
 ]

@@ -1,5 +1,6 @@
 from django import forms
-from university.models import Department, Faculty, Objective, Program, Course, ProgramCourse, Section
+from university.generator import generate_unique_code
+from university.models import Department, Faculty, Objective, Program, Course, ProgramCourse, Section, SubObjective
 
 class DepartmentForm(forms.ModelForm):
     class Meta:
@@ -99,8 +100,47 @@ class AddObjectiveForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["code"].label = "Code"
+        self.fields["code"].required = False # Make the code field optional
+
+    def clean_code(self):
+        code = self.cleaned_data['code']
+
+        # If the code is not entered by the user, generate one automatically
+        if not code:
+            code = generate_unique_code()
+        return code
 
 class UpdateObjectiveForm(forms.ModelForm):
     class Meta:
         model = Objective
-        fields = ['title']
+        fields = ['code', 'title']
+    
+    def __init__(self, objective, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["code"].label = "Code"
+        self.fields["code"].initial = objective.code
+        self.fields["code"].disabled = True
+        
+
+class AddSubObjectiveForm(forms.ModelForm):
+    class Meta:
+        model = SubObjective
+        fields = ['objective', 'code', 'description']
+    
+    def __init__(self, objective, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["code"].label = "Code"
+        self.fields["objective"].label = "Objective"
+        self.fields["objective"].initial = objective.code
+        self.fields["objective"].disabled = True
+
+class UpdateSubObjectiveForm(forms.ModelForm):
+    class Meta:
+        model = SubObjective
+        fields = ['objective', 'code', 'description']
+    
+    def __init__(self, objective, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["code"].label = "Code"
+        self.fields["objective"].label = "Objective"
+        self.fields["code"].disabled = True
