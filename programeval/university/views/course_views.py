@@ -3,7 +3,7 @@ from university.forms import AddCourseForm, AddSectionForm, UpdateCourseForm, Up
 from django.shortcuts import redirect,render,get_object_or_404
 
 def course_list(request):
-    courses = Course.objects.all()
+    courses = Course.objects.all().order_by('dept_id', 'course_id')
     return render(request,'university/course/course_list.html', {'courses': courses})
 
 def course_detail(request, dept_id, course_id):
@@ -34,7 +34,7 @@ def course_update(request, course_id, dept_id):
         form = UpdateCourseForm(request.POST, instance=course)
         if form.is_valid():
             form.save()
-            return redirect('course-detail', course.course_id, course.dept_id)
+            return redirect('course-detail', course.dept_id, course.course_id)
     else:
         form = UpdateCourseForm(instance=course)
     return render(request, 'university/course/course_update.html', {'form': form})
