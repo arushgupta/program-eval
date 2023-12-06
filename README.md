@@ -10,7 +10,7 @@ Refer to ProjectInstructions.pdf for project details and breakdown.
 
 3. Create Database called `programeval`<br/>
 
-4. Create a user with `username` and `password` as mentioned in the `.env` file<br/>
+4. Create a user with `username` and `password` and grant it privileges to the database.<br/>
 
 5. Setup a virtual environment:<br/>
 `python3 -m venv env`
@@ -18,20 +18,21 @@ Refer to ProjectInstructions.pdf for project details and breakdown.
 6. Activate the virtual environment:<br/>
 `source env/bin/activate`
 
-7. Install all packages:<br/>
+7. Create a .env file within the program (file should be located next to this README.md).<br/>
+
+8. Update the database environment variables with your username, password, and port.<br/>
+
+9. Install all packages:<br/>
 `pip install -r requirements.txt`
 
-8. Make Migrations:<br/>
+10. Make Migrations:<br/>
 `python3 manage.py makemigrations`
 
-9. Run Migrations:<br/>
+11. Run Migrations:<br/>
 `python3 manage.py migrate`
 
-10. Create superuser:<br/>
-`python3 manage.py createsuperuser`
+12. Load Data: <br/>
+`python3 manage.py loaddata university/fixtures/*.json`
 
-11. Load Data: <br/>
-
-
-12. Run Server:<br/>
+13. Run Server:<br/>
 `python3 manage.py runserver`
