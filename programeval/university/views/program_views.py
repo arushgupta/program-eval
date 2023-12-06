@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from university.models import Program, ProgramCourse
-from university.forms import ProgramForm, ProgramCourseForm
+from university.models import Program, ProgramCourse, ProgramObjective
+from university.forms import AddProgramObjectivesForm, ProgramForm, ProgramCourseForm
 
 def program_list(request):
     programs = Program.objects.all().order_by('name')
@@ -9,7 +9,8 @@ def program_list(request):
 def program_detail(request, pk):
     program = get_object_or_404(Program, pk=pk)
     courses = ProgramCourse.objects.filter(program_id=pk)
-    return render(request, 'university/program/detail.html', {'program': program, 'program_courses': courses})
+    objectives = ProgramObjective.objects.filter(program_id=pk)
+    return render(request, 'university/program/detail.html', {'program': program, 'program_courses': courses, 'objectives': objectives})
 
 def program_create(request):
     if request.method == 'POST':
@@ -52,7 +53,7 @@ def add_courses(request, program_id):
             return redirect('program-detail', program_id)
     else:
         form = ProgramCourseForm(program.department, program_id)
-    return render(request,'university/program/add_course.html',{'form': form, 'program': program_id})
+    return render(request,'university/program/add_course.html',{'form': form, 'program': program})
 
 def remove_courses(request, program_id, course_id):
     program_course = get_object_or_404(ProgramCourse, program_id=program_id, course_id=course_id)
@@ -60,3 +61,21 @@ def remove_courses(request, program_id, course_id):
         program_course.delete()
         return redirect('program-detail', program_id)
     return render(request,'university/program/remove_course.html',{'program_course': program_course , 'program': program_id})
+
+def add_program_objective(request, program_id):
+    program = get_object_or_404(Program, name=program_id)
+    if request.method == 'POST':
+        form = AddProgramObjectivesForm(program, request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('program-detail', program_id)
+    else:
+        form = AddProgramObjectivesForm(program)
+    return render(request, 'university/program/add_objective.html', {'form': form, 'program': program})
+
+def remove_program_objective(request, program_id, objective_id):
+    program_objective = get_object_or_404(ProgramObjective, program_id=program_id, objective_id=objective_id)
+    if request.method == 'POST':
+        program_objective.delete()
+        return redirect('program-detail', program_id)
+    return render(request, 'university/program/remove_objective.html', {'program_objective': program_objective})
