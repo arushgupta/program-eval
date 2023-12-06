@@ -1,14 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from university.models import Objective, ProgramCourseObjective, Course, ProgramCourse
-from university.forms import AddObjectiveForm, UpdateObjectiveForm  
+from university.models import Objective, ProgramCourseObjective, Course, ProgramCourse, SubObjective
+from university.forms import AddObjectiveForm, AddSubObjectiveForm, UpdateObjectiveForm, UpdateSubObjectiveForm  
 
 def objective_list(request):
     objectives = Objective.objects.all().order_by('code')
     return render(request, 'university/objective/list.html', {'objectives': objectives})
 
-def objective_detail(request, pk):
-    objective = get_object_or_404(Objective, pk=pk)
-    return render(request, 'university/objective/detail.html', {'objective': objective})
+def objective_detail(request, code):
+    objective = get_object_or_404(Objective, code=code)
+    sub_objectives = SubObjective.objects.filter(objective=objective)
+    return render(request, 'university/objective/detail.html', {'objective': objective, 'sub_objectives': sub_objectives})
 
 def objective_create(request):
     if request.method == 'POST':
@@ -20,30 +21,63 @@ def objective_create(request):
         form = AddObjectiveForm()
     return render(request, 'university/objective/create.html', {'form': form})
 
-def objective_update(request, pk):
-    objective = get_object_or_404(Objective, pk=pk)
+def objective_update(request, code):
+    objective = get_object_or_404(Objective, code=code)
     if request.method == 'POST':
-        form = UpdateObjectiveForm(request.POST, instance=objective)
+        form = UpdateObjectiveForm(objective, request.POST, instance=objective)
         if form.is_valid():
             form.save()
-            return redirect('objective-detail', objective.pk)
+            return redirect('objective-detail', objective.code)
     else:
-        form = UpdateObjectiveForm(instance=objective)
+        form = UpdateObjectiveForm(objective, instance=objective)
     return render(request, 'university/objective/update.html', {'form': form})
 
-def objective_delete(request, pk):
-    objective = get_object_or_404(Objective, pk=pk)
+def objective_delete(request, code):
+    objective = get_object_or_404(Objective, code=code)
     if request.method == 'POST':
         objective.delete()
         return redirect('objective-list')
     return render(request, 'university/objective/delete.html', {'objective': objective})
 
-def assign_objective_to_course(request, course_id):
-    course = get_object_or_404(Course, pk=course_id)
+def add_sub_objective(request, code):
+    objective = get_object_or_404(Objective, code=code)
     if request.method == 'POST':
-        objective_id = request.POST.get('objective_id')
-        objective = get_object_or_404(Objective, pk=objective_id)
-        ProgramCourseObjective.objects.create(course=course, objective=objective)
-        return redirect('course-detail', course_id)
-    objectives = Objective.objects.exclude(program_courses__course=course)
-    return render(request, 'university/objective/assign_to_course.html', {'course': course, 'objectives': objectives})
+        form = AddSubObjectiveForm(objective, request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('objective-detail', code)
+    else:
+        form = AddSubObjectiveForm(objective)
+    return render(request, 'university/objective/add_sub_objective.html', {'form': form, 'objective': objective})
+
+def update_sub_objective(request, o_code, s_code):
+    objective = get_object_or_404(Objective, code=o_code)
+    sub_objective = get_object_or_404(SubObjective, code=s_code, objective=objective)
+    if request.method == 'POST':
+        form = UpdateSubObjectiveForm(objective, request.POST, instance=sub_objective)
+        if form.is_valid():
+            form.save()
+            return redirect('objective-detail', o_code)
+    else:
+        form = UpdateSubObjectiveForm(objective, instance=sub_objective)
+    return render(request, 'university/objective/update_sub_objective.html', {'form': form, 'objective': objective})
+
+def delete_sub_objective(request, o_code, s_code):
+    objective = get_object_or_404(Objective, code=o_code)
+    sub_objective = get_object_or_404(SubObjective, code=s_code, objective=objective)
+    if request.method == 'POST':
+        sub_objective.delete()
+        return redirect('objective-detail', o_code)
+    return render(request, 'university/objective/delete_sub_objective.html', {'objective': objective, 'sub_objective': sub_objective})
+
+# def assign_objective_to_course(request, course_id):
+#     course = get_object_or_404(Course, pk=course_id)
+#     if request.method == 'POST':
+#         objective_id = request.POST.get('objective_id')
+#         objective = get_object_or_404(Objective, pk=objective_id)
+#         ProgramCourseObjective.objects.create(course=course, objective=objective)
+#         return redirect('course-detail', course_id)
+#     objectives = Objective.objects.exclude(program_courses__course=course)
+#     return render(request, 'university/objective/assign_to_course.html', {'course': course, 'objectives': objectives})
+
+

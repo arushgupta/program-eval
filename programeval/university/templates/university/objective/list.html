@@ -4,6 +4,8 @@
   <div class="container mt-4">
     <div>
       <h2>Objectives</h2>
+
+      <a class="btn btn-primary mb-2" href="{% url 'objective-add' %}">Add new Objective</a>
     </div>
 
     {% if objectives %}
@@ -18,11 +20,11 @@
         <tbody>
           {% for objective in objectives %}
             <tr>
-              <td><a href="#">{{ objective.code }}</a></td>
-              <td><a href="#">{{ objective.title }}</a></td>
+              <td><a href="{% url 'objective-detail' code=objective.code %}">{{ objective.code }}</a></td>
+              <td>{{ objective.title }}</td>
               <td>
-                <a class="btn btn-warning btn-sm" href="#">Edit</a>
-                <a class="btn btn-danger btn-sm" href="#">Delete</a>
+                <a class="btn btn-warning btn-sm" href="{% url 'objective-update' code=objective.code %}">Edit</a>
+                <a class="btn btn-danger btn-sm" href="{% url 'objective-delete' code=objective.code %}">Delete</a>
               </td>
             </tr>
           {% endfor %}

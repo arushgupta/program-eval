@@ -72,15 +72,15 @@ class ProgramCourse(models.Model):
 
 class Section(models.Model):
     class Semester(models.IntegerChoices):
-        FALL = 1, _('Fall')
-        SPRING = 2, _('Spring')
-        SUMMER = 3, _('Summer')
+        SPRING = 1, _('Spring')
+        SUMMER = 2, _('Summer')
+        FALL = 3, _('Fall')
 
     years = []
     for y in range(2010, (datetime.now().year + 5)):
         years.append((y, y))
 
-    section_id = models.CharField(_('Section ID'), max_length=3, validators=[MinLengthValidator(3)])
+    code = models.CharField(_('Section ID'), max_length=3, validators=[MinLengthValidator(3)])
     semester = models.PositiveSmallIntegerField(_('Semester'), choices=Semester.choices, default=Semester.FALL)
     year = models.PositiveSmallIntegerField(_('Year'), choices=years, default=datetime.now().year)
     prof = models.ForeignKey(Faculty, on_delete=models.CASCADE, related_name='section_prof')
@@ -90,23 +90,32 @@ class Section(models.Model):
     class Meta:
         verbose_name = _('Section')
         verbose_name_plural = _('Sections')
-        unique_together = ('section_id', 'course', 'semester', 'year')
+        unique_together = ('code', 'course', 'semester', 'year')
 
 
 class Objective(models.Model):
-    code = models.CharField(_("LO code"), max_length=4, validators=[MinLengthValidator(3)], primary_key=True)
+    code = models.CharField(_("Objective Code"), max_length=5, validators=[MinLengthValidator(3)], primary_key=True)
     title = models.CharField(_("Title"), max_length=50)
 
     def __str__(self):
         return self.title
 
+    class Meta:
+        verbose_name = _('Objective')
+        verbose_name_plural = _('Objectives')
+
 class SubObjective(models.Model):
-    code = models.CharField(_("SO Code"), max_length=4, validators=[MinLengthValidator(3)], primary_key=True)
-    description = models.TextField(_("SO Description"))
-    objective = models.ForeignKey(Objective, on_delete=models.CASCADE, related_name='subobjectives')
+    code = models.CharField(_("Sub-Objective Code"), max_length=5, validators=[MinLengthValidator(3)], primary_key=True)
+    description = models.TextField(_("Description"))
+    objective = models.ForeignKey(Objective, on_delete=models.CASCADE, related_name='so_objectives')
 
     def __str__(self):
-        return self.description
+        return f"{self.objective.code} - {self.code}"
+    
+    class Meta:
+        verbose_name = _('Sub-Objective')
+        verbose_name_plural = _('Sub-Objectives')
+        unique_together = ('code', 'objective')
 
 class ProgramCourseObjective(models.Model):
     program_course = models.ForeignKey(ProgramCourse, on_delete=models.CASCADE, related_name='objectives')

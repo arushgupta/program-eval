@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from university.models import Department
-from university.forms import DepartmentForm
+from university.forms import DepartmentForm, UpdateDepartmentForm
 
 def department_list(request):
     departments = Department.objects.all().order_by('dept_code')
@@ -23,12 +23,12 @@ def department_create(request):
 def department_update(request, pk):
     department = get_object_or_404(Department, pk=pk)
     if request.method == 'POST':
-        form = DepartmentForm(request.POST, instance=department)
+        form = UpdateDepartmentForm(request.POST, instance=department)
         if form.is_valid():
             form.save()
             return redirect('dept-detail', department.dept_code)
     else:
-        form = DepartmentForm(instance=department)
+        form = UpdateDepartmentForm(instance=department)
     return render(request, 'university/department/department_update.html', {'form': form})
 
 def department_delete(request, pk):
