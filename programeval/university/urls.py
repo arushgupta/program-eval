@@ -28,6 +28,10 @@ urlpatterns = [
     # Add/Remove Courses from Programs
     path('programs/<str:program_id>/courses/add/', views.add_courses, name='program_course-add'),
     path('programs/<str:program_id>/courses/<str:course_id>/remove/', views.remove_courses, name='program_course-delete'),
+
+    # Add/Remove Objectives from Programs
+    path('programs/<str:program_id>/objectives/add/', views.add_program_objective, name='program_obj-add'),
+    path('programs/<str:program_id>/objectives/<str:objective_id>/remove/', views.remove_program_objective, name='program_obj-delete'),
     
     # Course
     path('courses/', views.course_list, name='course-list'),
@@ -40,7 +44,7 @@ urlpatterns = [
     # Add/Update/Delete Section
     path('courses/<str:dept_id>/<str:course_id>/sections/add/', views.add_section, name='section-add'),
     path('courses/<str:dept_id>/<str:course_id>/<str:code>/<str:semester>/<int:year>/change/', views.update_section, name='section-update'),
-    path('courses/<str:dept_id>/<str:course_id>/<str:code>/<str:semester>/<int:year>/remove', views.remove_section, name='section-delete'),
+    path('courses/<str:dept_id>/<str:course_id>/<str:code>/<str:semester>/<int:year>/remove/', views.remove_section, name='section-delete'),
 
     # Objectives
     path('objectives/', views.objective_list, name='objective-list'),

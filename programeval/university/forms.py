@@ -1,6 +1,6 @@
 from django import forms
 from university.generator import generate_unique_code
-from university.models import Department, Faculty, Objective, Program, Course, ProgramCourse, Section, SubObjective
+from university.models import Department, Faculty, Objective, Program, Course, ProgramCourse, ProgramObjective, Section, SubObjective
 
 class DepartmentForm(forms.ModelForm):
     class Meta:
@@ -144,3 +144,13 @@ class UpdateSubObjectiveForm(forms.ModelForm):
         self.fields["code"].label = "Code"
         self.fields["objective"].label = "Objective"
         self.fields["code"].disabled = True
+
+class AddProgramObjectivesForm(forms.ModelForm):
+    class Meta:
+        model = ProgramObjective
+        fields = '__all__'
+
+    def __init__(self, program, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["program"].initial = program
+        self.fields["program"].disabled = True

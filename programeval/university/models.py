@@ -117,6 +117,18 @@ class SubObjective(models.Model):
         verbose_name_plural = _('Sub-Objectives')
         unique_together = ('code', 'objective')
 
+class ProgramObjective(models.Model):
+    program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='po_program')
+    objective = models.ForeignKey(Objective, on_delete=models.CASCADE, related_name='po_objective')
+
+    class Meta:
+        verbose_name = _('Program Objective')
+        verbose_name_plural = _('Program Objectives')
+        unique_together = ('program', 'objective')
+    
+    def __str__(self):
+        return f"{self.program.name} - {self.objective.code}"
+
 class ProgramCourseObjective(models.Model):
     program_course = models.ForeignKey(ProgramCourse, on_delete=models.CASCADE, related_name='objectives')
     objective = models.ForeignKey(Objective, on_delete=models.CASCADE, related_name='program_courses')
