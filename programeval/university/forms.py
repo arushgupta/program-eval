@@ -125,25 +125,23 @@ class UpdateObjectiveForm(forms.ModelForm):
 class AddSubObjectiveForm(forms.ModelForm):
     class Meta:
         model = SubObjective
-        fields = ['objective', 'code', 'description']
+        fields = ['objective', 'description']
     
     def __init__(self, objective, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["code"].label = "Code"
         self.fields["objective"].label = "Objective"
-        self.fields["objective"].initial = objective.code
+        self.fields["objective"].initial = objective
         self.fields["objective"].disabled = True
 
 class UpdateSubObjectiveForm(forms.ModelForm):
     class Meta:
         model = SubObjective
-        fields = ['objective', 'code', 'description']
+        fields = '__all__'
     
-    def __init__(self, objective, *args, **kwargs):
+    def __init__(self, objective, sub_objective, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["code"].label = "Code"
         self.fields["objective"].label = "Objective"
-        self.fields["code"].disabled = True
+        self.fields["objective"].disabled = True
 
 class AddProgramObjectivesForm(forms.ModelForm):
     class Meta:

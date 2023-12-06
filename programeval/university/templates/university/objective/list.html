@@ -2,12 +2,12 @@
 
 {% block content %}
   <div class="container mt-4">
-    <div>
-      <h2>Objectives</h2>
-
-      <a class="btn btn-primary mb-2" href="{% url 'objective-add' %}">Add new Objective</a>
+    <div class="d-flex justify-content-between align-items-center">
+      <h2 class="mb-0">Learning Objectives</h2>
+      <a class="btn btn-primary mb-1" href="{% url 'objective-add' %}">Add New Objective</a>
     </div>
-
+    <br>
+    
     {% if objectives %}
       <table class="table table-striped">
         <thead>

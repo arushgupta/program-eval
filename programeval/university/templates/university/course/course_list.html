@@ -3,10 +3,12 @@
 
 {% block content %}
   <div class="container mt-4">
-    <div>
-      <h2>Courses</h2>
-      <a class="btn btn-primary mb-2" href="{% url 'course-add' %}">Add new Courses</a>
+    <div class="d-flex justify-content-between align-items-center">
+      <h2 class="mb-0">Courses</h2>
+      <a class="btn btn-primary mb-1" href="{% url 'course-add' %}">Add new Courses</a>
     </div>
+    <br>
+    
 
     {% if courses %}
       <table class="table table-striped">

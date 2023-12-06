@@ -52,19 +52,19 @@ def add_sub_objective(request, code):
 
 def update_sub_objective(request, o_code, s_code):
     objective = get_object_or_404(Objective, code=o_code)
-    sub_objective = get_object_or_404(SubObjective, code=s_code, objective=objective)
+    sub_objective = get_object_or_404(SubObjective, pk=s_code, objective=objective)
     if request.method == 'POST':
-        form = UpdateSubObjectiveForm(objective, request.POST, instance=sub_objective)
+        form = UpdateSubObjectiveForm(objective, sub_objective, request.POST, instance=sub_objective)
         if form.is_valid():
             form.save()
             return redirect('objective-detail', o_code)
     else:
-        form = UpdateSubObjectiveForm(objective, instance=sub_objective)
+        form = UpdateSubObjectiveForm(objective, sub_objective, instance=sub_objective)
     return render(request, 'university/objective/update_sub_objective.html', {'form': form, 'objective': objective})
 
 def delete_sub_objective(request, o_code, s_code):
     objective = get_object_or_404(Objective, code=o_code)
-    sub_objective = get_object_or_404(SubObjective, code=s_code, objective=objective)
+    sub_objective = get_object_or_404(SubObjective, pk=s_code, objective=objective)
     if request.method == 'POST':
         sub_objective.delete()
         return redirect('objective-detail', o_code)

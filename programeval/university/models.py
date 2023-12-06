@@ -94,7 +94,7 @@ class Section(models.Model):
 
 
 class Objective(models.Model):
-    code = models.CharField(_("Objective Code"), max_length=5, validators=[MinLengthValidator(3)], primary_key=True)
+    code = models.CharField(_("Objective Code"), max_length=5, validators=[MinLengthValidator(3)], unique=True)
     title = models.CharField(_("Title"), max_length=50)
 
     def __str__(self):
@@ -105,7 +105,6 @@ class Objective(models.Model):
         verbose_name_plural = _('Objectives')
 
 class SubObjective(models.Model):
-    code = models.CharField(_("Sub-Objective Code"), max_length=5, validators=[MinLengthValidator(3)], primary_key=True)
     description = models.TextField(_("Description"))
     objective = models.ForeignKey(Objective, on_delete=models.CASCADE, related_name='so_objectives')
 
@@ -115,7 +114,7 @@ class SubObjective(models.Model):
     class Meta:
         verbose_name = _('Sub-Objective')
         verbose_name_plural = _('Sub-Objectives')
-        unique_together = ('code', 'objective')
+        unique_together = ('id', 'objective')
 
 class ProgramObjective(models.Model):
     program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='po_program')

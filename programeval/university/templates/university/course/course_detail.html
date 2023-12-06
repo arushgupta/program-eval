@@ -16,11 +16,11 @@
     </div>
 
     <div class="container mt-4">
-      <div>
-        <h2>Sections</h2>
-        <a class="btn btn-primary mb-2" href="{% url 'section-add' dept_id=course.dept.dept_code course_id=course.course_id %}">Add Sections</a>
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">Sections</h2>
+        <a class="btn btn-primary mb-1" href="{% url 'section-add' dept_id=course.dept.dept_code course_id=course.course_id %}">Add Sections</a>
       </div>
-
+      <br>
     {% if sections %}
       <table class="table table-striped">
         <thead>
@@ -52,7 +52,7 @@
     {% endif %}
 
     <div class="mt-4">
-      <a href="{% url 'course-list' %}" class="btn btn-secondary">Back to Course List</a>
+      <a href="{% url 'course-list' %}" class="btn btn-secondary">Back to Courses</a>
     </div>
   </div>
 {% endblock %}
