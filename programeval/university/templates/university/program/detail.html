@@ -54,6 +54,16 @@
             {% else %}
               <p>No objectives have been added for this course yet.</p>
             {% endif %}
+            <strong>Sections:</strong>
+              {% if course.course.section_course.all %}
+                <ul>
+                  {% for section in course.course.section_course.all|dictsortreversed:"year"|dictsort:"semester" %}
+                    <li>{{ section.code }}: {{ section.get_semester_display }} {{ section.year }}</li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <p>No year information available for this course.</p>
+              {% endif %}
           </div>
         {% endfor %}
       {% else %}
