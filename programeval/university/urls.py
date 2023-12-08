@@ -35,6 +35,7 @@ urlpatterns = [
 
     # Add/Remove Objectives from Programs
     path('programs/<str:program_id>/objectives/add/', views.add_program_objective, name='program_obj-add'),
+    path('ajax/load-sub-objectives/', views.load_sub_objectives, name='ajax-load-sub_objectives'),
     path('programs/<str:program_id>/objectives/<str:objective_id>/remove/', views.remove_program_objective, name='program_obj-delete'),
     
     # Course

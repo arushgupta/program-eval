@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from university.models import Objective, Program, ProgramCourse, ProgramCourseObjective, ProgramObjective
+from university.models import Objective, Program, ProgramCourse, ProgramCourseObjective, ProgramObjective, SubObjective
 from university.forms import AddProgramCourseObjectivesForm, AddProgramObjectivesForm, ProgramForm, ProgramCourseForm
 
 def program_list(request):
@@ -13,13 +13,22 @@ def program_detail(request, pk):
     courses = []
     
     for program_course in program_courses:
-        objective_ids = ProgramCourseObjective.objects.filter(program_course=program_course).values_list('objective_id', flat=True)
-        course_objectives = Objective.objects.filter(id__in=objective_ids).order_by('id')
-        if objectives.count() == 0:
-            pair = (program_course, None)
+        objective_ids = ProgramCourseObjective.objects.filter(program_course=program_course, sub_objective=None).values_list('program_objective_id', flat=True)
+        sub_objective_ids = ProgramCourseObjective.objects.filter(program_course=program_course).exclude(sub_objective=None).values_list('sub_objective_id', flat=True)
+        program_objectives = ProgramObjective.objects.filter(id__in=objective_ids).order_by('id')
+        sub_objectives = SubObjective.objects.filter(id__in=sub_objective_ids).order_by('id')
+        course_data = [program_course]
+        
+        if program_objectives.count() == 0:
+            course_data.append(None)
         else:
-            pair = (program_course, course_objectives)
-        courses.append(pair)
+            course_data.append(program_objectives)
+        
+        if sub_objectives.count() == 0:
+            course_data.append(None)
+        else:
+            course_data.append(sub_objectives)
+        courses.append(course_data)
         
     return render(request, 'university/program/detail.html', {'program': program, 'program_courses': courses, 'objectives': objectives})
 
@@ -85,11 +94,17 @@ def add_program_objective(request, program_id):
     return render(request, 'university/program/add_objective.html', {'form': form, 'program': program})
 
 def remove_program_objective(request, program_id, objective_id):
-    program_objective = get_object_or_404(ProgramObjective, program_id=program_id, objective_id=objective_id)
+    program_objective = get_object_or_404(ProgramObjective, program_id=program_id, objective__code=objective_id)
     if request.method == 'POST':
         program_objective.delete()
         return redirect('program-detail', program_id)
     return render(request, 'university/program/remove_objective.html', {'program_objective': program_objective})
+
+def load_sub_objectives(request):
+    po_id = request.GET.get('objective')
+    program_objective = get_object_or_404(ProgramObjective, pk=po_id)
+    sub_objectives = SubObjective.objects.filter(objective_id=program_objective.objective_id)
+    return render(request, 'university/program/sub_objective_dropdown_list_options.html', {'sub_objectives': sub_objectives})
 
 def add_program_course_objective(request, program_id, course_id):
     program = get_object_or_404(Program, name=program_id)
@@ -105,7 +120,7 @@ def add_program_course_objective(request, program_id, course_id):
 
 def delete_program_course_objective(request, program_id, course_id, objective):
     program_course = get_object_or_404(ProgramCourse, program_id=program_id, course_id=course_id)
-    pc_objective = get_object_or_404(ProgramCourseObjective, program_course=program_course, objective__code=objective)
+    pc_objective = get_object_or_404(ProgramCourseObjective, program_course=program_course, program_objective__objective__code=objective)
     if request.method == 'POST':
         pc_objective.delete()
         return redirect('program-detail', program_id)

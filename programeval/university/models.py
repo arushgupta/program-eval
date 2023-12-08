@@ -114,7 +114,7 @@ class SubObjective(models.Model):
     objective = models.ForeignKey(Objective, on_delete=models.CASCADE, related_name='so_objectives')
 
     def __str__(self):
-        return f"{self.objective.code} - {self.code}"
+        return f"{self.objective.code}.{self.id}"
     
     class Meta:
         verbose_name = _('Sub-Objective')
@@ -131,32 +131,24 @@ class ProgramObjective(models.Model):
         unique_together = ('program', 'objective')
     
     def __str__(self):
-        return f"{self.program.name} - {self.objective.code}"
+        return f"{self.program.name}: {self.objective.code}, {self.objective.title}"
 
+# RESOLVED: Potential Inconsistency: Only the GUI is ensuring that an objective doesn't get assigned to a Program Course if there are no objectives related to the Program
+# Null value of sub_objective implies that the (program, course) pair has been assigned an objective
 class ProgramCourseObjective(models.Model):
     program_course = models.ForeignKey(ProgramCourse, on_delete=models.CASCADE, related_name='pco_program_course')
-    objective = models.ForeignKey(Objective, on_delete=models.CASCADE, related_name='pco_objective')
+    program_objective = models.ForeignKey(ProgramObjective, on_delete=models.CASCADE, related_name='course_objective')
+    sub_objective = models.ForeignKey(SubObjective, null=True, on_delete=models.CASCADE, related_name='course_sub_objective')
 
     class Meta:
         verbose_name = _("Program Course Objective")
         verbose_name_plural = _("Program Course Objectives")
-        unique_together = ('program_course', 'objective')
+        unique_together = ('program_course', 'program_objective', 'sub_objective')
 
     def __str__(self):
-        return f"{self.program_course.program.name}: {self.program_course.course.dept.dept_code}{self.program_course.course.course_id} - {self.objective.title}"
-
-# Potential Inconsistency: Only the GUI is ensuring that an objective doesn't get assigned to a Program Course if there are no objectives related to the Program
-class ProgramCourseSubObjective(models.Model):
-    program_course = models.ForeignKey(ProgramCourse, on_delete=models.CASCADE, related_name='pcso_program_course')
-    sub_objective = models.ForeignKey(SubObjective, on_delete=models.CASCADE, related_name='pcso_sub_objective')
-
-    class Meta:
-        verbose_name = _('Program-Course Sub-Objective')
-        verbose_name_plural = _('Program-Course Sub-Objectives')
-        unique_together = ('program_course', 'sub_objective')
-    
-    def __str__(self):
-        return f"{self.program_course.program.name}: {self.program_course.course.dept.dept_code}{self.program_course.course.course_id} - {self.sub_objective.description}"
+        if self.sub_objective:
+            return f"{self.program_course.program.name}: {self.program_course.course.dept.dept_code}{self.program_course.course.course_id} - {self.program_objective.objective.code}.{self.sub_objective.pk}"
+        return f"{self.program_course.program.name}: {self.program_course.course.dept.dept_code}{self.program_course.course.course_id} - {self.program_objective.objective.code}"
 
 class SectionSubObjective(models.Model):
     section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='sso_section')

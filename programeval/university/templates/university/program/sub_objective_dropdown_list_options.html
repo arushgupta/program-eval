@@ -1,0 +1,6 @@
+<!-- sub_objective_dropdown_list_options.html -->
+
+<option value="">All</option>
+{% for sub_objective in sub_objectives %}
+<option value="{{ sub_objective.pk }}">{{ sub_objective.objective.code }}.{{ sub_objective.pk }}</option>
+{% endfor %}

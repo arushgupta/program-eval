@@ -18,7 +18,7 @@
         {% for objective in objectives %}
           <p>
             <span><a href="{% url 'objective-detail' code=objective.objective.code %}"><strong>{{ objective.objective.code }}</strong></a>: {{ objective.objective.title }}</span>
-            <span><a href="{% url 'program_obj-delete' program_id=program.name objective_id=objective.objective.code %}">[remove]</a></span>
+            <span><a style="color: #dc3545;" href="{% url 'program_obj-delete' program_id=program.name objective_id=objective.objective.code %}">[remove]</a></span>
           </p>
         {% endfor %}
       {% else %}
@@ -34,7 +34,7 @@
       </div>
       <br>
       {% if program_courses %}
-        {% for course, objectives in program_courses %}
+        {% for course, program_objectives, sub_objectives in program_courses %}
           <div class="mb-3">
             <strong><a href="{% url 'course-detail' dept_id=course.course.dept_id course_id=course.course.course_id %}">{{ course.course.dept_id }}{{ course.course.course_id }}</a>: {{ course.course.title }}</strong>
             <span class="ml-3">
@@ -42,18 +42,40 @@
               <a style="color: #dc3545;" href="{% url 'program_course-delete' program_id=program.name course_id=course.course_id %}">[Delete]</a>
             </span>
             <br>
-            {% if objectives %}
-              <ul>
-                {% for objective in objectives %}
-                  <li>
-                    <span>{{ objective.code }}: {{ objective.title }}</span>
-                    <span><a href="{% url 'program_course_obj-delete' program_id=program.name course_id=course.course_id objective=objective.code %}" style="color: #dc3545;">[remove]</a></span>
-                  </li>
-                {% endfor %}
-              </ul>
+            {% if program_objectives or sub_objectives %}
+              {% if program_objectives %}
+                <ul>
+                  {% for prog_objective in program_objectives %}
+                    <li>
+                      <span>{{ prog_objective.objective.code }}: {{ prog_objective.objective.title }}</span>
+                      <span><a href="{% url 'program_course_obj-delete' program_id=program.name course_id=course.course_id objective=prog_objective.objective.code %}" style="color: #dc3545;">[remove]</a></span>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+              {% if sub_objectives %}
+                <ul>
+                  {% for sub_objective in sub_objectives %}
+                    <li>
+                      <span>{{ sub_objective.objective.code }}.{{ sub_objective.pk }}: {{ sub_objective.description }}</span>
+                      <span><a href="{% url 'program_course_obj-delete' program_id=program.name course_id=course.course_id objective=sub_objective.objective.code %}" style="color: #dc3545;">[remove]</a></span>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
             {% else %}
               <p>No objectives have been added for this course yet.</p>
             {% endif %}
+            <strong>Sections:</strong>
+              {% if course.course.section_course.all %}
+                <ul>
+                  {% for section in course.course.section_course.all|dictsortreversed:"year"|dictsort:"semester" %}
+                    <li>{{ section.code }}: {{ section.get_semester_display }} {{ section.year }}</li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <p>No year information available for this course.</p>
+              {% endif %}
           </div>
         {% endfor %}
       {% else %}
