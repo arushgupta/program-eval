@@ -1,0 +1,50 @@
+[
+{
+    "model": "university.subobjective",
+    "pk": 1,
+    "fields": {
+        "description": "LO1, Sub 1",
+        "objective": 1
+    }
+},
+{
+    "model": "university.subobjective",
+    "pk": 2,
+    "fields": {
+        "description": "LO1, Sub 2",
+        "objective": 1
+    }
+},
+{
+    "model": "university.subobjective",
+    "pk": 3,
+    "fields": {
+        "description": "LO 2, Sub 1",
+        "objective": 2
+    }
+},
+{
+    "model": "university.subobjective",
+    "pk": 4,
+    "fields": {
+        "description": "LO 2, Sub 2",
+        "objective": 2
+    }
+},
+{
+    "model": "university.subobjective",
+    "pk": 5,
+    "fields": {
+        "description": "LO 2, Sub 3",
+        "objective": 2
+    }
+},
+{
+    "model": "university.subobjective",
+    "pk": 6,
+    "fields": {
+        "description": "LO 5, Sub 1",
+        "objective": 5
+    }
+}
+]

@@ -162,4 +162,31 @@ class AddProgramCourseObjectivesForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["program_course"].initial = program_course
         self.fields["program_course"].disabled = True
-        self.fields["objective"].queryset = Objective.objects.filter(po_objective__program=program)
+        self.fields["program_course"].label = "Course"
+        self.fields["program_objective"].label = "Objective"
+        self.fields["sub_objective"].label = "Sub-Objective"
+        self.fields["sub_objective"].queryset = SubObjective.objects.none()
+        self.fields["sub_objective"].required = False
+
+        if 'program_objective' in self.data:
+            try:
+                po_id = int(self.data.get('program_objective'))
+                program_objective = ProgramObjective.objects.get(pk=po_id)
+                self.fields['sub_objective'].queryset = SubObjective.objects.filter(objective_id=program_objective.objective_id)
+            except (ValueError, TypeError):
+                pass
+    
+    def clean(self, *args, **kwargs):
+        pc = self.cleaned_data['program_course']
+        po = self.cleaned_data['program_objective']
+        so = self.cleaned_data['sub_objective']
+
+        if so:
+            if ProgramCourseObjective.objects.filter(program_course=pc, program_objective=po, sub_objective=so).exists():
+                raise forms.ValidationError("This Sub-Objective is already assigned to this course.")
+            elif ProgramCourseObjective.objects.filter(program_course=pc, program_objective=po, sub_objective=None).exists():
+                raise forms.ValidationError("The Objective is aleady assigned to this course.")
+        else:
+            if ProgramCourseObjective.objects.filter(program_course=pc, program_objective=po, sub_objective=so).exists():
+                raise forms.ValidationError("The Objective is already assigned to this course.")
+        super().clean(*args, **kwargs)
