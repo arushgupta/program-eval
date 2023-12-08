@@ -29,6 +29,10 @@ urlpatterns = [
     path('programs/<str:program_id>/courses/add/', views.add_courses, name='program_course-add'),
     path('programs/<str:program_id>/courses/<str:course_id>/remove/', views.remove_courses, name='program_course-delete'),
 
+    # Add/Remove (Sub)objectives from Program-Course
+    path('programs/<str:program_id>/courses/<str:course_id>/objectives/add/', views.add_program_course_objective, name='program_course_obj-add'),
+    path('programs/<str:program_id>/courses/<str:course_id>/objectives/<str:objective>/remove/', views.delete_program_course_objective, name='program_course_obj-delete'),
+
     # Add/Remove Objectives from Programs
     path('programs/<str:program_id>/objectives/add/', views.add_program_objective, name='program_obj-add'),
     path('programs/<str:program_id>/objectives/<str:objective_id>/remove/', views.remove_program_objective, name='program_obj-delete'),

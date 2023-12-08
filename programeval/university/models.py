@@ -68,7 +68,12 @@ class ProgramCourse(models.Model):
     program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name='program')
     
     class Meta:
+        verbose_name = _('Program Course')
+        verbose_name_plural = _('Program Courses')
         unique_together = ('course', 'program')
+    
+    def __str__(self):
+        return f"{self.program.name}: {self.course.dept.dept_code}{self.course.course_id}"
 
 class Section(models.Model):
     class Semester(models.IntegerChoices):
@@ -129,30 +134,55 @@ class ProgramObjective(models.Model):
         return f"{self.program.name} - {self.objective.code}"
 
 class ProgramCourseObjective(models.Model):
-    program_course = models.ForeignKey(ProgramCourse, on_delete=models.CASCADE, related_name='objectives')
-    objective = models.ForeignKey(Objective, on_delete=models.CASCADE, related_name='program_courses')
-    evaluation_method = models.CharField(_("Evaluation Method"), max_length=50)
-
-    def __str__(self):
-        return f"{self.program_course} - {self.objective}"
+    program_course = models.ForeignKey(ProgramCourse, on_delete=models.CASCADE, related_name='pco_program_course')
+    objective = models.ForeignKey(Objective, on_delete=models.CASCADE, related_name='pco_objective')
 
     class Meta:
         verbose_name = _("Program Course Objective")
         verbose_name_plural = _("Program Course Objectives")
         unique_together = ('program_course', 'objective')
 
-class SectionObjectiveEvaluation(models.Model):
-    section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='objective_evaluations')
-    program_course_objective = models.ForeignKey(ProgramCourseObjective, on_delete=models.CASCADE, related_name='section_evaluations')
-    students_met = models.PositiveIntegerField(_("Number of Students Met"), default=0)
+    def __str__(self):
+        return f"{self.program_course.program.name}: {self.program_course.course.dept.dept_code}{self.program_course.course.course_id} - {self.objective.title}"
+
+# Potential Inconsistency: Only the GUI is ensuring that an objective doesn't get assigned to a Program Course if there are no objectives related to the Program
+class ProgramCourseSubObjective(models.Model):
+    program_course = models.ForeignKey(ProgramCourse, on_delete=models.CASCADE, related_name='pcso_program_course')
+    sub_objective = models.ForeignKey(SubObjective, on_delete=models.CASCADE, related_name='pcso_sub_objective')
+
+    class Meta:
+        verbose_name = _('Program-Course Sub-Objective')
+        verbose_name_plural = _('Program-Course Sub-Objectives')
+        unique_together = ('program_course', 'sub_objective')
+    
+    def __str__(self):
+        return f"{self.program_course.program.name}: {self.program_course.course.dept.dept_code}{self.program_course.course.course_id} - {self.sub_objective.description}"
+
+class SectionSubObjective(models.Model):
+    section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='sso_section')
+    sub_objective = models.ForeignKey(ProgramCourseObjective, on_delete=models.CASCADE, related_name='sso_sub_objective')
+    program_course = models.ForeignKey(ProgramCourse, on_delete=models.CASCADE, related_name='sso_program_course')
+
+    class Meta:
+        verbose_name = _("Section Objective")
+        verbose_name_plural = _("Section Objectives")
+        unique_together = ('section', 'sub_objective', 'program_course')
 
     def __str__(self):
-        return f"{self.section} - {self.program_course_objective}"
+        return f"{self.program_course.program.name}> {self.program_course.course.dept.dept_code}{self.program_course.course.course_id}> {self.section.code} - {self.sub_objective.description}"
+
+class Evaluation(models.Model):
+    section_sub_objective = models.ForeignKey(SectionSubObjective, on_delete=models.CASCADE, related_name='evaluation_sso')
+    method = models.CharField(_('Evaluation Method'), max_length=50)
+    qualified = models.PositiveIntegerField(_('Students That Met Objective'), default=0, validators=[MinValueValidator(0)])
 
     class Meta:
         verbose_name = _("Section Objective Evaluation")
         verbose_name_plural = _("Section Objective Evaluations")
-        unique_together = ('section', 'program_course_objective')
+
+    def __str__(self):
+        return f"{self.section_sub_objective.program_course.program.name}> {self.section_sub_objective.program_course.course.dept.dept_code}{self.section_sub_objective.program_course.course.course_id}> {self.section_sub_objective.section.code}> {self.section_sub_objective.sub_objective.description} - {self.method}"
+
 
 # TODO: Create a table that links Section and Subobjective
 # class Evaluation(models.Model):

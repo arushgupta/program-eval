@@ -1,4 +1,4 @@
-<!-- remove_course.html -->
+<!-- remove_course_objective.html -->
 
 {% extends 'university/base.html' %}
 
@@ -7,7 +7,7 @@
     <h2>Remove a Course</h2>
 
     <div class="mt-4">
-      <h6>Are you sure you want to remove the course with <strong>{{ program_course.course.dept.dept_code }}{{ program_course.course.course_id }}</strong> from <strong>{{program_course.program_id}}</strong>?</h6>
+      <h6>Are you sure you want to remove the {{ pc_objective.objective.code }}: {{ pc_objective.objective.title }} from the {{ program_course.course.dept.dept_code }}{{ program_course.course.course_id }} course in the {{program_course.program_id}} program?</h6>
 
       <form method="post" action="">
         {% csrf_token %}

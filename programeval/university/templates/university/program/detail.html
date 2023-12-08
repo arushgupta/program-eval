@@ -34,26 +34,28 @@
       </div>
       <br>
       {% if program_courses %}
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th scope="col">Code</th>
-              <th scope="col">Title</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for course in program_courses %}
-              <tr>
-                <td><a href="{% url 'course-detail' dept_id=course.course.dept_id course_id=course.course.course_id %}">{{ course.course.dept_id }}{{ course.course.course_id }}</a></td>
-                <td>{{ course.course.title }}</td>
-                <td>
-                  <a class="btn btn-danger btn-sm" href="{% url 'program_course-delete' program_id=program.name course_id=course.course_id %}">Delete</a>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+        {% for course, objectives in program_courses %}
+          <div class="mb-3">
+            <strong><a href="{% url 'course-detail' dept_id=course.course.dept_id course_id=course.course.course_id %}">{{ course.course.dept_id }}{{ course.course.course_id }}</a>: {{ course.course.title }}</strong>
+            <span class="ml-3">
+              <a style="color: #007bff;" href="{% url 'program_course_obj-add' program_id=program.name course_id=course.course_id %}">[Add Objective]</a>
+              <a style="color: #dc3545;" href="{% url 'program_course-delete' program_id=program.name course_id=course.course_id %}">[Delete]</a>
+            </span>
+            <br>
+            {% if objectives %}
+              <ul>
+                {% for objective in objectives %}
+                  <li>
+                    <span>{{ objective.code }}: {{ objective.title }}</span>
+                    <span><a href="{% url 'program_course_obj-delete' program_id=program.name course_id=course.course_id objective=objective.code %}" style="color: #dc3545;">[remove]</a></span>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p>No objectives have been added for this course yet.</p>
+            {% endif %}
+          </div>
+        {% endfor %}
       {% else %}
         <p>No courses have been added yet.</p>
       {% endif %}
