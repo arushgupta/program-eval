@@ -70,7 +70,10 @@
               {% if course.course.section_course.all %}
                 <ul>
                   {% for section in course.course.section_course.all|dictsortreversed:"year"|dictsort:"semester" %}
-                    <li>{{ section.code }}: {{ section.get_semester_display }} {{ section.year }}</li>
+                    <li>
+                        <span>{{ section.code }}: {{ section.get_semester_display }} {{ section.year }}</span>
+                        <span><a href="{% url 'program_course_section-detail' program_id=program.name course_id=course.course_id semester=section.semester year=section.year section_code=section.code %}">[View]</a></span>
+                    </li>
                   {% endfor %}
                 </ul>
               {% else %}
