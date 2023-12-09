@@ -1,0 +1,53 @@
+<!-- section_objective.html -->
+{% extends 'university/base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2>Section Details</h2>
+    <p><strong>Program:</strong> {{ program_course.program.name }}</p>
+    <p><strong>Course:</strong> {{ program_course.course.dept.dept_code }}{{ program_course.course.course_id }}</p>
+    <p><strong>Section:</strong> {{ section.code }} {{ section.get_semester_display }} {{ section.year }}</p>
+
+    <div class="container mt-4">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">Objectives</h2>
+      </div>
+      <br>
+
+      {% if sub_objectives %}
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Code</th>
+              <th scope="col">Description</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for sso in sub_objectives %}
+              <tr>
+                    {% if sso.sub_objective %}
+                        <td>{{ sso.program_objective.objective.code }}.{{ sso.sub_objective.pk }}</td>
+                        <td>{{ sso.sub_objective.description }}</td>
+                    {% else %}
+                        <td>{{ sso.program_objective.objective.code }}</td>
+                        <td>{{ sso.program_objective.objective.title }}</td>
+                    {% endif %}
+                <td>
+                  <a class="btn btn-primary btn-sm" href="#">Add Evaluation</a>
+                  <a class="btn btn-warning btn-sm" href="#">Update Evaluation</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p>No Sub-Objectives have been assigned to {{ program_course.course.dept.dept_code }}{{ program_course.course.course_id }} yet.</p>
+      {% endif %}
+    </div>
+
+    <div class="mt-3">
+      <a href="{% url 'program-detail' pk=program_course.program_id %}" class="btn btn-secondary">Back to {{ program_course.program.name }}</a>
+    </div>
+  </div>
+{% endblock %}

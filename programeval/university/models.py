@@ -139,6 +139,7 @@ class ProgramCourseObjective(models.Model):
     program_course = models.ForeignKey(ProgramCourse, on_delete=models.CASCADE, related_name='pco_program_course')
     program_objective = models.ForeignKey(ProgramObjective, on_delete=models.CASCADE, related_name='course_objective')
     sub_objective = models.ForeignKey(SubObjective, null=True, on_delete=models.CASCADE, related_name='course_sub_objective')
+    has_sub_objectives = models.BooleanField(_('Has Sub-Objectives'), default=True)
 
     class Meta:
         verbose_name = _("Program Course Objective")
@@ -152,28 +153,52 @@ class ProgramCourseObjective(models.Model):
 
 class SectionSubObjective(models.Model):
     section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='sso_section')
-    sub_objective = models.ForeignKey(ProgramCourseObjective, on_delete=models.CASCADE, related_name='sso_sub_objective')
+    program_course_objective = models.ForeignKey(ProgramCourseObjective, on_delete=models.CASCADE, related_name='sso_course_objective')
     program_course = models.ForeignKey(ProgramCourse, on_delete=models.CASCADE, related_name='sso_program_course')
+    program_objective = models.ForeignKey(ProgramObjective, on_delete=models.CASCADE, related_name='sso_objective')
+    sub_objective = models.ForeignKey(SubObjective, null=True, on_delete=models.CASCADE, related_name='sso_sub_objective')
 
     class Meta:
-        verbose_name = _("Section Objective")
-        verbose_name_plural = _("Section Objectives")
-        unique_together = ('section', 'sub_objective', 'program_course')
-
+        verbose_name = _("Section Sub-Objective")
+        verbose_name_plural = _("Section Sub-Objectives")
+        unique_together = ('section', 'program_course_objective', 'program_course', 'program_objective', 'sub_objective')
+    
     def __str__(self):
-        return f"{self.program_course.program.name}> {self.program_course.course.dept.dept_code}{self.program_course.course.course_id}> {self.section.code} - {self.sub_objective.description}"
+        return f"{self.program_course.program.name}: {self.program_course.course.dept.dept_code}{self.program_course.course.course_id}: {self.section.code} - {self.section.semester.label} {self.section.semester.year}"
 
-class Evaluation(models.Model):
-    section_sub_objective = models.ForeignKey(SectionSubObjective, on_delete=models.CASCADE, related_name='evaluation_sso')
-    method = models.CharField(_('Evaluation Method'), max_length=50)
-    qualified = models.PositiveIntegerField(_('Students That Met Objective'), default=0, validators=[MinValueValidator(0)])
 
-    class Meta:
-        verbose_name = _("Section Objective Evaluation")
-        verbose_name_plural = _("Section Objective Evaluations")
+# class SectionEvaluation(models.Model):
+#     section_sub_objective = models.ForeignKey()
+#     method = models.CharField(_('Evaluation Method'), max_length=50)
+#     qualified = models.PositiveIntegerField(_('Students That Met Objective'), default=0, validators=[MinValueValidator(0)])
 
-    def __str__(self):
-        return f"{self.section_sub_objective.program_course.program.name}> {self.section_sub_objective.program_course.course.dept.dept_code}{self.section_sub_objective.program_course.course.course_id}> {self.section_sub_objective.section.code}> {self.section_sub_objective.sub_objective.description} - {self.method}"
+#     class Meta:
+#         verbose_name = _('Section Evaluation')
+#         verbose_name_plural = _('Section Evaluations')
+#         unique_together = ('program_course_objective', 'section', 'sub_objective')
+
+# class SectionSubObjective(models.Model):
+#     section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='sso_section')
+#     sub_objective = models.ForeignKey(ProgramCourseObjective, on_delete=models.CASCADE, related_name='sso_sub_objective')
+#     program_course = models.ForeignKey(ProgramCourse, on_delete=models.CASCADE, related_name='sso_program_course')
+
+#     class Meta:
+#         verbose_name = _("Section Objective")
+#         verbose_name_plural = _("Section Objectives")
+#         unique_together = ('section', 'sub_objective', 'program_course')
+
+#     def __str__(self):
+#         return f"{self.program_course.program.name}> {self.program_course.course.dept.dept_code}{self.program_course.course.course_id}> {self.section.code} - {self.sub_objective.description}"
+
+# class Evaluation(models.Model):
+#     section_sub_objective = models.ForeignKey(SectionSubObjective, on_delete=models.CASCADE, related_name='evaluation_sso')
+
+#     class Meta:
+#         verbose_name = _("Section Objective Evaluation")
+#         verbose_name_plural = _("Section Objective Evaluations")
+
+#     def __str__(self):
+#         return f"{self.section_sub_objective.program_course.program.name}> {self.section_sub_objective.program_course.course.dept.dept_code}{self.section_sub_objective.program_course.course.course_id}> {self.section_sub_objective.section.code}> {self.section_sub_objective.sub_objective.description} - {self.method}"
 
 
 # TODO: Create a table that links Section and Subobjective

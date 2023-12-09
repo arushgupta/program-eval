@@ -38,13 +38,15 @@ urlpatterns = [
     path('ajax/load-sub-objectives/', views.load_sub_objectives, name='ajax-load-sub_objectives'),
     path('programs/<str:program_id>/objectives/<str:objective_id>/remove/', views.remove_program_objective, name='program_obj-delete'),
     
+    # Section-SubObjective View
+    path('programs/<str:program_id>/courses/<str:course_id>/<int:semester>/<int:year>/<str:section_code>/', views.program_course_section_detail, name='program_course_section-detail'),
+    
     # Course
     path('courses/', views.course_list, name='course-list'),
     path('courses/add/', views.course_create, name='course-add'),
     path('courses/<str:dept_id>/<str:course_id>/', views.course_detail, name='course-detail'),
     path('courses/<str:dept_id>/<str:course_id>/change/', views.course_update, name='course-update'),
     path('courses/<str:dept_id>/<str:course_id>/remove/', views.course_delete, name='course-delete'),
-    # path('courses/<str:course_id>/assign-objective/', views.assign_objective_to_course, name='assign-objective-to-course'),
     
     # Add/Update/Delete Section
     path('courses/<str:dept_id>/<str:course_id>/sections/add/', views.add_section, name='section-add'),
@@ -62,4 +64,5 @@ urlpatterns = [
     path('objectives/<str:code>/sub/add/', views.add_sub_objective, name='sub_objective-add'),
     path('objectives/<str:o_code>/<str:s_code>/change/', views.update_sub_objective, name='sub_objective-update'),
     path('objectives/<str:o_code>/<str:s_code>/remove/', views.delete_sub_objective, name='sub_objective-delete'),
+
 ]

@@ -189,4 +189,8 @@ class AddProgramCourseObjectivesForm(forms.ModelForm):
         else:
             if ProgramCourseObjective.objects.filter(program_course=pc, program_objective=po, sub_objective=so).exists():
                 raise forms.ValidationError("The Objective is already assigned to this course.")
+        
+        if SubObjective.objects.filter(objective_id=po.objective_id).count() == 0:
+            self.cleaned_data['has_sub_objectives'] = False
+        
         super().clean(*args, **kwargs)
