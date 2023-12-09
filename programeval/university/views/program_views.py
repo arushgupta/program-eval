@@ -116,7 +116,6 @@ def add_program_course_objective(request, program_id, course_id):
         form = AddProgramCourseObjectivesForm(program, program_course, request.POST)
         if form.is_valid():
             pco = form.save()
-            import pdb; pdb.set_trace()
             
             sections = Section.objects.filter(course_id=pco.program_course.course_id)
             section_sub_objectives = []
@@ -151,7 +150,6 @@ def delete_program_course_objective(request, program_id, course_id, objective):
     return render(request, 'university/program/remove_course_objective.html', {'program_course': program_course, 'pc_objective': pc_objective})
 
 def program_course_section_detail(request, program_id, course_id, semester, year, section_code):
-    # import pdb; pdb.set_trace()
     program_course = get_object_or_404(ProgramCourse, program__name=program_id, course_id=course_id)
     section = get_object_or_404(Section, course_id=course_id, code=section_code, semester=semester, year=year)
     section_sub_objectives = SectionSubObjective.objects.filter(program_course=program_course, section=section)
