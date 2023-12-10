@@ -68,4 +68,6 @@ urlpatterns = [
     path('objectives/<str:o_code>/<str:s_code>/change/', views.update_sub_objective, name='sub_objective-update'),
     path('objectives/<str:o_code>/<str:s_code>/remove/', views.delete_sub_objective, name='sub_objective-delete'),
 
+    # Evaluation Results
+    path('semester-evaluations/', views.get_semester_program_evaluation, name='get-semester-program-evaluation'),
 ]

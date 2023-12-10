@@ -9,8 +9,30 @@
 
     <p>SMU has <strong>{{ departments }}</strong> departments providing <strong>{{ programs }}</strong> programs that offer <strong>{{ courses }}</strong> courses taught by <strong>{{ faculty }}</strong> professors.</p>
 
-    <p class="lead mb-5">Review learning objectives</p>
   </div>
 </div>
+
+<h4 class="lead mb-5 text-center">View Evaluations</h4>
+<!-- Form for Semester and Program based Evaluation  -->
+<form method="post" action="{% url 'get-semester-program-evaluation' %}" class="form-inline d-flex justify-content-center mt-4">
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  {% for field in form %}
+    <div class="form-group mx-3 my-2">
+      {{ field.label_tag }}
+      {{ field }}
+      {% if field.errors %}
+        <div class="alert alert-danger mt-2" role="alert">
+          {% for error in field.errors %}
+            {{ error }}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+  <button class="btn btn-primary my-2" type="submit">Submit</button>
+</form>
+
+
 
 {% endblock content %}
