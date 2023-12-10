@@ -157,6 +157,7 @@ class SectionSubObjective(models.Model):
     program_course = models.ForeignKey(ProgramCourse, on_delete=models.CASCADE, related_name='sso_program_course')
     program_objective = models.ForeignKey(ProgramObjective, on_delete=models.CASCADE, related_name='sso_objective')
     sub_objective = models.ForeignKey(SubObjective, null=True, on_delete=models.CASCADE, related_name='sso_sub_objective')
+    is_evaluated = models.BooleanField(_('Is Evaluated'), default=False)
 
     class Meta:
         verbose_name = _("Section Sub-Objective")
@@ -164,18 +165,18 @@ class SectionSubObjective(models.Model):
         unique_together = ('section', 'program_course_objective', 'program_course', 'program_objective', 'sub_objective')
     
     def __str__(self):
-        return f"{self.program_course.program.name}: {self.program_course.course.dept.dept_code}{self.program_course.course.course_id}: {self.section.code} - {self.section.semester.label} {self.section.semester.year}"
+        if self.sub_objective:
+            return f"{self.program_course.program.name}: {self.program_course.course.dept.dept_code}{self.program_course.course.course_id}: {self.section.code} - {Section.Semester(self.section.semester).label} {self.section.year} - {self.program_objective.objective.code}.{self.sub_objective.pk}"
+        return f"{self.program_course.program.name}: {self.program_course.course.dept.dept_code}{self.program_course.course.course_id}: {self.section.code} - {Section.Semester(self.section.semester).label} {self.section.year} - {self.program_objective.objective.code}"
 
+class SectionEvaluation(models.Model):
+    section_sub_objective = models.ForeignKey(SectionSubObjective, on_delete=models.CASCADE, related_name='evaluation_sso')
+    method = models.CharField(_('Evaluation Method'), max_length=50)
+    qualified = models.PositiveIntegerField(_('Students That Met Objective'), default=0, validators=[MinValueValidator(0)])
 
-# class SectionEvaluation(models.Model):
-#     section_sub_objective = models.ForeignKey()
-#     method = models.CharField(_('Evaluation Method'), max_length=50)
-#     qualified = models.PositiveIntegerField(_('Students That Met Objective'), default=0, validators=[MinValueValidator(0)])
-
-#     class Meta:
-#         verbose_name = _('Section Evaluation')
-#         verbose_name_plural = _('Section Evaluations')
-#         unique_together = ('program_course_objective', 'section', 'sub_objective')
+    class Meta:
+        verbose_name = _('Section Evaluation')
+        verbose_name_plural = _('Section Evaluations')
 
 # class SectionSubObjective(models.Model):
 #     section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='sso_section')
