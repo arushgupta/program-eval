@@ -21,23 +21,20 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link" href="#" style="color: white;">About</a>
+              <a class="nav-link" href="{% url 'dept-list' %}" style="color: white;">Departments</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'dept-list' %}" style="color: white;">Departments</a>
-          </li>
+              <a class="nav-link" href="{% url 'objective-list' %}" style="color: white;">Objectives</a>
+            </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'faculty-list' %}" style="color: white;">Faculty</a>
-          </li>    
+            </li>    
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'program-list' %}" style="color: white;">Programs</a>
+              <a class="nav-link" href="{% url 'program-list' %}" style="color: white;">Programs</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'course-list' %}" style="color: white;">Courses</a>
-          </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'objective-list' %}" style="color: white;">Objectives</a>
-          </li>
+            </li>
           </ul>
         </div>
       </div>

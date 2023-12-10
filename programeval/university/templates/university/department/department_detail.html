@@ -4,25 +4,31 @@
 {% block content %}
   <div class="container mt-5">
     <h1>{{ department.name }} Department</h1>
-    <h6>Code: {{ department.dept_code }}</h6>
+    <h4>Code: {{ department.dept_code }}</h4>
 
     <br>
 
-    <h4>Programs</h4>
+    <h2>Programs</h2>
     <ul>
       {% for program in department.prog_dept.all %}
-        <li>{{ program.name }} - Admin: {{ program.admin.name }}</li>
+        <li>
+          <a href="{% url 'program-detail' pk=program.name %}">{{ program.name }}</a> - Admin: {{ program.admin.name }}
+        </li>
       {% endfor %}
     </ul>
 
     <br>
 
-    <h4>Active Faculty</h4>
+    <div class="d-flex justify-content-between align-items-center">
+      <h2 class="mb-0">Active Faculty</h2>
+      <a class="btn btn-primary mb-1" href="#">Hire Faculty</a>
+    </div>
+    <br>
     <ol>
       {% for faculty in department.faculty_dept.all %}
         {% if faculty.is_active %}
           <li>
-            {{ faculty.name }} - Rank: {{ faculty.get_rank_display }}
+            <a href="{% url 'faculty-detail' pk=faculty.pk %}">{{ faculty.name }}</a> - Rank: {{ faculty.get_rank_display }}
             {% if faculty.prog_admin.all %}
               (Programs:
               {% for program in faculty.prog_admin.all %}
@@ -37,11 +43,14 @@
 
     <br>
 
-    <h4>Fired/Inactive Faculty</h4>
+    <h2>Fired/Inactive Faculty</h2>
     <ol>
       {% for faculty in department.faculty_dept.all %}
         {% if not faculty.is_active %}
-          <li>{{ faculty.name }} - Rank: {{ faculty.get_rank_display }}</li>
+          <li>
+            <span>{{ faculty.name }} - Rank: {{ faculty.get_rank_display }}</span>
+            <span><a href="#">[re-hire]</a></span>
+          </li>
         {% endif %}
       {% endfor %}
     </ol>

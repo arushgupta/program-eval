@@ -157,6 +157,9 @@ class AddProgramCourseObjectivesForm(forms.ModelForm):
     class Meta:
         model = ProgramCourseObjective
         fields = '__all__'
+        widgets = {
+            'has_sub_objectives': forms.HiddenInput(),
+        }
     
     def __init__(self, program, program_course, *args, **kwargs):
         super().__init__(*args, **kwargs)
