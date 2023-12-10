@@ -38,9 +38,11 @@ urlpatterns = [
     path('ajax/load-sub-objectives/', views.load_sub_objectives, name='ajax-load-sub_objectives'),
     path('programs/<str:program_id>/objectives/<str:objective_id>/remove/', views.remove_program_objective, name='program_obj-delete'),
     
-    # Section-SubObjective View
+    # Section - Evaluations
     path('programs/<str:program_id>/courses/<str:course_id>/<int:semester>/<int:year>/<str:section_code>/', views.program_course_section_detail, name='program_course_section-detail'),
     path('programs/<str:program_id>/courses/<str:course_id>/<int:semester>/<int:year>/<str:section_code>/<int:sso_id>/add/', views.add_evaluation, name='evaluation-add'),
+    path('programs/<str:program_id>/courses/<str:course_id>/<int:semester>/<int:year>/<str:section_code>/<int:sso_id>/update/', views.edit_evaluation, name='evaluation-update'),
+    path('programs/<str:program_id>/courses/<str:course_id>/<int:semester>/<int:year>/<str:section_code>/<int:sso_id>/delete/', views.delete_evaluation, name='evaluation-delete'),
     
     # Course
     path('courses/', views.course_list, name='course-list'),

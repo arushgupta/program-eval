@@ -1,6 +1,6 @@
 from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
-from university.forms import AddEvaluationForm
+from university.forms import AddEvaluationForm, UpdateEvaluationForm
 from university.models import ProgramCourse, Section, SectionEvaluation, SectionSubObjective
 
 
@@ -19,8 +19,6 @@ def program_course_section_detail(request, program_id, course_id, semester, year
 
 @transaction.atomic
 def add_evaluation(request, program_id, course_id, semester, year, section_code, sso_id):
-    program_course = get_object_or_404(ProgramCourse, program__name=program_id, course_id=course_id)
-    section = get_object_or_404(Section, course_id=course_id, code=section_code, semester=semester, year=year)
     section_sub_objective = get_object_or_404(SectionSubObjective, pk=sso_id)
     if request.method == 'POST':
         form = AddEvaluationForm(section_sub_objective, request.POST)
@@ -34,3 +32,26 @@ def add_evaluation(request, program_id, course_id, semester, year, section_code,
     else:
         form = AddEvaluationForm(section_sub_objective)
     return render(request, 'university/evaluation/add_evaluation.html', {'form': form, 'sso': section_sub_objective})
+
+def edit_evaluation(request, program_id, course_id, semester, year, section_code, sso_id):
+    section_sub_objective = get_object_or_404(SectionSubObjective, pk=sso_id)
+    section_evaluation = get_object_or_404(SectionEvaluation, section_sub_objective=section_sub_objective)
+    if request.method == 'POST':
+        form = UpdateEvaluationForm(section_sub_objective, request.POST, instance=section_evaluation)
+        if form.is_valid():
+            form.save()
+            return redirect('program_course_section-detail', program_id, course_id, semester, year, section_code)
+    else:
+        form = UpdateEvaluationForm(section_sub_objective, instance=section_evaluation)
+    return render(request, 'university/evaluation/update_evaluation.html', {'form': form, 'sso': section_sub_objective, 'program_id': program_id, 'course_id': course_id, 'semester': semester, 'year': year, 'section_code': section_code})
+
+@transaction.atomic
+def delete_evaluation(request, program_id, course_id, semester, year, section_code, sso_id):
+    section_sub_objective = get_object_or_404(SectionSubObjective, pk=sso_id)
+    section_evaluation = get_object_or_404(SectionEvaluation, section_sub_objective=section_sub_objective)
+    if request.method == 'POST':
+        section_sub_objective.is_evaluated = False
+        section_sub_objective.save()
+        section_evaluation.delete()
+        return redirect('program_course_section-detail', program_id, course_id, semester, year, section_code)
+    return render(request, 'university/evaluation/delete_evaluation.html', {'sso': section_sub_objective, 'program_id': program_id, 'course_id': course_id, 'semester': semester, 'year': year, 'section_code': section_code})
