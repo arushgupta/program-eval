@@ -7,7 +7,7 @@
     <p><strong>Program:</strong> {{ program_course.program.name }}</p>
     <p><strong>Course:</strong> {{ program_course.course.dept.dept_code }}{{ program_course.course.course_id }}</p>
     <p><strong>Section:</strong> {{ section.code }} {{ section.get_semester_display }} {{ section.year }}</p>
-    <br><br>
+    <br>
 
     <div class="container mt-4">
       <div class="d-flex justify-content-between align-items-center">
@@ -46,11 +46,11 @@
                     {% endif %}
                     <td>
                         {% if sso.is_evaluated %}
-                            <a class="btn btn-warning btn-sm" href="#">Update Evaluation</a>
+                            <a class="btn btn-warning btn-sm" href="{% url 'evaluation-update' program_id=program_course.program.name course_id=program_course.course_id semester=section.semester year=section.year section_code=section.code sso_id=sso.pk %}">Update Evaluation</a>
                         {% else %}
                             <a class="btn btn-primary btn-sm" href="{% url 'evaluation-add' program_id=program_course.program.name course_id=program_course.course_id semester=section.semester year=section.year section_code=section.code sso_id=sso.pk %}">Add Evaluation</a>
                         {% endif %}
-                        <a class="btn btn-danger btn-sm" href="#">Delete</a>
+                        <a class="btn btn-danger btn-sm" href="{% url 'evaluation-delete' program_id=program_course.program.name course_id=program_course.course_id semester=section.semester year=section.year section_code=section.code sso_id=sso.pk %}">Delete</a>
                     </td>
               </tr>
             {% endfor %}

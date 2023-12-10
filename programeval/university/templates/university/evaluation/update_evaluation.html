@@ -1,0 +1,46 @@
+<!-- update_evaluation.html -->
+
+{% extends 'university/base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2 class="mb-4">Update Class Evaluation</h2>
+    <p><strong>Program:</strong> {{ sso.program_course.program.name }}</p>
+    <p><strong>Course:</strong> {{ sso.program_course.course.dept.dept_code }}{{ sso.program_course.course.course_id }}</p>
+    <p><strong>Section:</strong> {{ sso.section.code }} {{ sso.section.get_semester_display }} {{ sso.section.year }}</p>
+    <p><strong>Students Enrolled:</strong> {{ sso.section.enrolled }}</p>
+    {% if sso.sub_objective %}
+        <p><strong>Objective:</strong> {{ sso.program_objective.objective.code }}.{{ sso.sub_objective.pk }} > {{ sso.sub_objective.description }}</p>
+    {% else %}
+        <p><strong>Objective:</strong> {{ sso.program_objective.objective.code }} > {{ sso.program_objective.objective.title }}</p>
+    {% endif %}
+    
+    <form method="post" action="" novalidate>
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+        
+      {% for field in form.hidden_fields %}
+        {{ field }}
+      {% endfor %}
+
+      {% for field in form.visible_fields %}
+        <div class="form-group">
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.errors %}
+            <div class="alert alert-danger mt-2" role="alert">
+              {% for error in field.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+      <button class="btn btn-primary mt-3" type="submit">Save</button>
+    </form>
+
+    <div class="mt-4">
+      <a href="{% url 'program_course_section-detail' program_id=program_id course_id=course_id semester=semester year=year section_code=section_code %}" class="btn btn-secondary">Back to Section Evaluations</a>
+    </div>
+  </div>
+{% endblock %}
