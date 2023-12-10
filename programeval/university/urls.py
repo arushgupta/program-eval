@@ -40,6 +40,7 @@ urlpatterns = [
     
     # Section-SubObjective View
     path('programs/<str:program_id>/courses/<str:course_id>/<int:semester>/<int:year>/<str:section_code>/', views.program_course_section_detail, name='program_course_section-detail'),
+    path('programs/<str:program_id>/courses/<str:course_id>/<int:semester>/<int:year>/<str:section_code>/<int:sso_id>/add/', views.add_evaluation, name='evaluation-add'),
     
     # Course
     path('courses/', views.course_list, name='course-list'),

@@ -1,7 +1,6 @@
-from itertools import chain
 from django.db import transaction
 from django.shortcuts import render, redirect, get_object_or_404
-from university.models import Objective, Program, ProgramCourse, ProgramCourseObjective, ProgramObjective, Section, SectionSubObjective, SubObjective
+from university.models import Program, ProgramCourse, ProgramCourseObjective, ProgramObjective, Section, SectionSubObjective, SubObjective
 from university.forms import AddProgramCourseObjectivesForm, AddProgramObjectivesForm, ProgramForm, ProgramCourseForm
 
 def program_list(request):
@@ -122,19 +121,22 @@ def add_program_course_objective(request, program_id, course_id):
             
             if pco.sub_objective:
                 for section in sections:
-                    section_sub_objectives.append(SectionSubObjective(section=section, program_course_objective=pco, program_course=pco.program_course, program_objective=pco.program_objective, sub_objective=pco.sub_objective))
+                    section_sub_objectives.append(SectionSubObjective(section=section, program_course_objective=pco, program_course=pco.program_course, 
+                                                                      program_objective=pco.program_objective, sub_objective=pco.sub_objective))
                 SectionSubObjective.objects.bulk_create(section_sub_objectives)
             
             elif pco.sub_objective is None and pco.has_sub_objectives:
                 sub_objectives = SubObjective.objects.filter(objective_id=pco.program_objective.objective_id)
                 for section in sections:
                     for sub_objective in sub_objectives:
-                        section_sub_objectives.append(SectionSubObjective(section=section, program_course_objective=pco, program_course=pco.program_course, program_objective=pco.program_objective, sub_objective=sub_objective))
+                        section_sub_objectives.append(SectionSubObjective(section=section, program_course_objective=pco, program_course=pco.program_course, 
+                                                                          program_objective=pco.program_objective, sub_objective=sub_objective))
                 SectionSubObjective.objects.bulk_create(section_sub_objectives)
             
             else:
                 for section in sections:
-                    section_sub_objectives.append(SectionSubObjective(section=section, program_course_objective=pco, program_course=pco.program_course, program_objective=pco.program_objective, sub_objective=None))
+                    section_sub_objectives.append(SectionSubObjective(section=section, program_course_objective=pco, program_course=pco.program_course, 
+                                                                      program_objective=pco.program_objective, sub_objective=None))
                 SectionSubObjective.objects.bulk_create(section_sub_objectives)
             return redirect('program-detail', program_id)
     else:
@@ -148,15 +150,3 @@ def delete_program_course_objective(request, program_id, course_id, objective):
         pc_objective.delete()
         return redirect('program-detail', program_id)
     return render(request, 'university/program/remove_course_objective.html', {'program_course': program_course, 'pc_objective': pc_objective})
-
-def program_course_section_detail(request, program_id, course_id, semester, year, section_code):
-    program_course = get_object_or_404(ProgramCourse, program__name=program_id, course_id=course_id)
-    section = get_object_or_404(Section, course_id=course_id, code=section_code, semester=semester, year=year)
-    section_sub_objectives = SectionSubObjective.objects.filter(program_course=program_course, section=section)
-    return render(request, 'university/program/section_objective.html', {'sub_objectives': section_sub_objectives, 'section': section, 'program_course': program_course})
-
-    # course_objectives = ProgramCourseObjective.objects.filter(program_course=program_course, sub_objective=None).values_list('program_objective__objective_id', flat=True)
-    # course_sub_objectives = ProgramCourseObjective.objects.filter(program_course=program_course).exclude(sub_objective=None).values_list('sub_objective_id', flat=True)
-    # course_objectives_sub = SubObjective.objects.filter(objective_id__in=course_objectives)
-    # sub_objectives = SubObjective.objects.filter(id__in=course_sub_objectives)
-    # sub_objective_list = list(chain(course_objectives_sub, sub_objectives))

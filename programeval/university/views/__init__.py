@@ -4,3 +4,4 @@ from university.views.faculty_views import *
 from university.views.program_views import *
 from university.views.course_views import *
 from university.views.objective_views import *
+from university.views.evaluation_views import *

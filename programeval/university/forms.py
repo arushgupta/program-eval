@@ -1,6 +1,6 @@
 from django import forms
 from university.generator import generate_unique_code
-from university.models import Department, Faculty, Objective, Program, Course, ProgramCourse, ProgramCourseObjective, ProgramObjective, Section, SubObjective
+from university.models import Department, Faculty, Objective, Program, Course, ProgramCourse, ProgramCourseObjective, ProgramObjective, Section, SectionEvaluation, SubObjective
 
 class DepartmentForm(forms.ModelForm):
     class Meta:
@@ -194,3 +194,27 @@ class AddProgramCourseObjectivesForm(forms.ModelForm):
             self.cleaned_data['has_sub_objectives'] = False
         
         super().clean(*args, **kwargs)
+
+class AddEvaluationForm(forms.ModelForm):
+    class Meta:
+        model = SectionEvaluation
+        fields = '__all__'
+        widgets = {
+            'section_sub_objective': forms.HiddenInput(),
+        }
+
+    def clean(self, *args, **kwargs):
+        super().clean(*args, **kwargs)
+        sso = self.cleaned_data['section_sub_objective']
+        qualified = self.cleaned_data['qualified']
+        
+        if qualified < 0:
+            raise forms.ValidationError("Please enter a valid number of students.")
+        if qualified > sso.section.enrolled:
+            raise forms.ValidationError(f"This section only has {sso.section.enrolled} students, please provide a value within range.")
+
+    def __init__(self, sso, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["section_sub_objective"].initial = sso
+        self.fields["section_sub_objective"].disabled = True
+        
