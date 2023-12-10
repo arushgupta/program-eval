@@ -1,0 +1,61 @@
+{% extends 'university/base.html' %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h2 class="mb-4">Semester Evaluation</h2>
+        <p class="font-weight-bold">Program: {{ program.name }}</p>
+        <p class="font-weight-bold">Semester: {{ semester }}</p>
+        <br>
+        <div class="mt-4">
+            {% for program_course, section_objectives in program_course_evaluations %}
+                <div class="mb-4">
+                    <h4 class="font-weight-bold">Course: {{ program_course.course.dept.dept_code }} {{ program_course.course.course_id }}</h4>
+                    {% if section_objectives %}
+                        {% for section, section_evaluations in section_objectives %}
+                            <div class="mb-3">
+                                <h6 class="font-weight-bold">Section: {{ section.code }}</h6>
+                                {% if section_evaluations %}
+                                    {% for section_so, evaluation in section_evaluations %}
+                                        <div class="mb-2 ml-3">
+                                            {% if evaluation %}
+                                                {% if section_so.sub_objective %}
+                                                    <p><strong>Sub - Objective {{ section_so.program_objective.objective.code }}.{{ section_so.sub_objective.pk }}</strong>: {{ section_so.program_objective.objective.title }} > {{ section_so.sub_objective.description }}</p>
+                                                    <div class="ml-3">
+                                                        <p><strong>Evaluation Method</strong>: {{ evaluation.method }}</p>
+                                                        <p><strong>Students</strong> {{ evaluation.qualified }}/{{ section_so.section.enrolled }}</p>
+                                                    </div>
+                                                {% else %}
+                                                    <p><strong>{{ section_so.program_objective.objective.code }}</strong>: {{ section_so.program_objective.objective.title }}</p>
+                                                    <div class="ml-3">
+                                                        <p><strong>Method</strong> {{ evaluation.method }}</p>
+                                                        <p><strong>Students</strong>: {{ evaluation.qualified }}/{{ section_so.section.enrolled }}</p>
+                                                    </div>
+                                                {% endif %}
+                                            {% else %}
+                                                {% if section_so.sub_objective %}
+                                                    <p><strong>Sub - Objective {{ section_so.program_objective.objective.code }}.{{ section_so.sub_objective.pk }}</strong>: {{ section_so.program_objective.objective.title }} > {{ section_so.sub_objective.description }}</p>
+                                                    <div class="ml-3">
+                                                        <p>This objective hasn't been evaluated.</p>
+                                                    </div>
+                                                {% else %}
+                                                    <p><strong>Objective {{ section_so.program_objective.objective.code }}</strong>: {{ section_so.program_objective.objective.title }}</p>
+                                                    <div class="ml-3">
+                                                        <p>This objective hasn't been evaluated.</p>
+                                                    </div>
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <p>No objectives assigned for evaluation.</p>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>There are no {{ semester }} sections for this course to be evaluated.</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

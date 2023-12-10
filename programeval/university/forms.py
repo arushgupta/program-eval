@@ -1,3 +1,4 @@
+from datetime import datetime
 from django import forms
 from university.generator import generate_unique_code
 from university.models import Department, Faculty, Objective, Program, Course, ProgramCourse, ProgramCourseObjective, ProgramObjective, Section, SectionEvaluation, SubObjective
@@ -157,6 +158,9 @@ class AddProgramCourseObjectivesForm(forms.ModelForm):
     class Meta:
         model = ProgramCourseObjective
         fields = '__all__'
+        widgets = {
+            'has_sub_objectives': forms.HiddenInput(),
+        }
     
     def __init__(self, program, program_course, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -240,3 +244,12 @@ class UpdateEvaluationForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["section_sub_objective"].initial = sso
         self.fields["section_sub_objective"].disabled = True
+
+class SemesterEvaluationForm(forms.Form):
+    semester = forms.ChoiceField(choices=Section.Semester.choices, label='Session')
+    years = []
+    for y in range(2010, (datetime.now().year + 5)):
+        years.append((y, y))
+    year = forms.ChoiceField(choices=years, label='Year', initial=datetime.now().year)
+    program = forms.ModelChoiceField(queryset=Program.objects.all(), label='Program')
+
