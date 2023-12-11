@@ -1,0 +1,55 @@
+<!-- add_program_course_objective.html -->
+
+{% extends 'university/base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2 class="mb-4">Add Objective</h2>
+
+    <form method="post" action="" id="objectiveForm" data-sub_objectives-url="{% url 'ajax-load-sub_objectives' %}" novalidate>
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      
+      {% for field in form.hidden_fields %}
+        {{ field }}
+      {% endfor %}
+
+      {% for field in form.visible_fields %}
+        <div class="form-group">
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.errors %}
+            <div class="alert alert-danger mt-2" role="alert">
+              {% for error in field.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+      <button class="btn btn-primary mt-3" type="submit">Save</button>
+    </form>
+
+    <div class="mt-4">
+        <a href="{% url 'program-detail' pk=program.name %}" class="btn btn-secondary">Back to Program</a>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+    $("#id_program_objective").change(function () {
+      var url = $("#objectiveForm").attr("data-sub_objectives-url");  // get the url of the `load_sub_objectives` view
+      var objectiveId = $(this).val();  // get the selected objective ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request
+        data: {
+          'objective': objectiveId      
+        },
+        success: function (data) {   // `data` is the return of the `load_sub_objectives` view function
+          $("#id_sub_objective").html(data);  // replace the contents of the sub_objective input with the data that came from the server
+        }
+      });
+
+    });
+  </script>
+{% endblock %} 

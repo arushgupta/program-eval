@@ -1,0 +1,22 @@
+<!-- faculty_detail.html -->
+
+{% extends 'university/base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2 class="mb-4">{{ faculty.name }} Details</h2>
+
+    <div class="card">
+      <div class="card-body">
+        <p class="card-text"><strong>Code:</strong> {{ faculty.uni_id }}</p>
+        <p class="card-text"><strong>Email:</strong> {{ faculty.email }}</p>
+        <p class="card-text"><strong>Rank:</strong> {{ faculty.get_rank_display }}</p>
+        <p class="card-text"><strong>Department:</strong> {{ faculty.department.name }}</p>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <a href="{% url 'faculty-list' %}" class="btn btn-secondary">Back to Faculty List</a>
+    </div>
+  </div>
+{% endblock %}

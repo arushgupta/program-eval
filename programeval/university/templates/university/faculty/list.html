@@ -1,0 +1,38 @@
+<!-- faculty_list.html -->
+{% extends 'university/base.html' %}
+
+{% block content %}
+  <div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center">
+      <h2 class="mb-0">Faculty Members</h2>
+      <a class="btn btn-primary mb-1" href="{% url 'faculty-add' %}">Hire new Faculty Member</a>
+    </div>
+    <br>
+
+    {% if faculty %}
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">University ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for staff in faculty %}
+            <tr>
+              <td><a href="{% url 'faculty-detail' pk=staff.uni_id %}">{{ staff.uni_id }}</a></td>
+              <td>{{ staff.name }}</td>
+              <td>
+                <a class="btn btn-warning btn-sm" href="{% url 'update-faculty' pk=staff.uni_id %}">Edit</a>
+                <a class="btn btn-danger btn-sm" href="{% url 'fire-faculty' pk=staff.uni_id %}">Fire</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No staff has been hired yet.</p>
+    {% endif %}
+  </div>
+{% endblock %}

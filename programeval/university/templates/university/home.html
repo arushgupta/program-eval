@@ -1,0 +1,59 @@
+{% extends 'university/base.html' %}
+
+{% block content %}
+
+<!-- Jumbotron Banner and Basic Search -->
+<div class="jumbotron jumbotron-fluid" style="color: #4a4a4a; background-color: white;">
+  <div class="container text-center">
+    <h1 class="display-4 mb-4">Program Evaluation</h1>
+
+    <p>SMU has <strong>{{ departments }}</strong> departments providing <strong>{{ programs }}</strong> programs that offer <strong>{{ courses }}</strong> courses taught by <strong>{{ faculty }}</strong> professors.</p>
+
+  </div>
+</div>
+
+<h4 class="lead mb-5 text-center">View Semester-Program Evaluations</h4>
+<!-- Form for Semester and Program based Evaluation  -->
+<form method="post" action="{% url 'get-semester-program-evaluation' %}" class="form-inline d-flex justify-content-center mt-4">
+  {% csrf_token %}
+  {{ semester_form.non_field_errors }}
+  {% for field in semester_form %}
+    <div class="form-group mx-3 my-2">
+      {{ field.label_tag }}
+      {{ field }}
+      {% if field.errors %}
+        <div class="alert alert-danger mt-2" role="alert">
+          {% for error in field.errors %}
+            {{ error }}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+  <button class="btn btn-primary my-2" type="submit">Submit</button>
+</form>
+
+<br>
+
+<h4 class="lead mb-5 text-center">View Academic Year Evaluations</h4>
+<!-- Form for Academic Year based Evaluation  -->
+<form method="post" action="{% url 'get-yearly-evaluation' %}" class="form-inline d-flex justify-content-center mt-4">
+  {% csrf_token %}
+  {{ yearly_form.non_field_errors }}
+  {% for field in yearly_form %}
+    <div class="form-group mx-3 my-2">
+      {{ field.label_tag }}
+      {{ field }}
+      {% if field.errors %}
+        <div class="alert alert-danger mt-2" role="alert">
+          {% for error in field.errors %}
+            {{ error }}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+  <button class="btn btn-primary my-2" type="submit">Submit</button>
+</form>
+
+{% endblock content %}

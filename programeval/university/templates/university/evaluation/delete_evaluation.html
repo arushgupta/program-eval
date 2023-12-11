@@ -1,0 +1,22 @@
+<!-- delete_evaluation.html -->
+
+{% extends 'university/base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2>Delete Evaluation</h2>
+
+    <div class="mt-4">
+      <h6>Are you sure you want to remove evaluation for section {{ sso.section.code }} in {{ sso.section.get_semester_display }} {{ sso.section.year }} in {{ sso.program_course.course.dept.dept_code }}{{ sso.program_course.course.course_id }} course from the {{ sso.program_course.program_id }} program?</h6>
+
+      <form method="post" action="">
+        {% csrf_token %}
+        <button class="btn btn-danger mt-3" type="submit">Remove</button>
+      </form>
+
+      <div class="mt-3">
+        <a href="{% url 'program_course_section-detail' program_id=program_id course_id=course_id semester=semester year=year section_code=section_code %}" class="btn btn-secondary">Back to Section Evaluation</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

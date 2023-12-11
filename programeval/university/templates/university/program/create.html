@@ -1,0 +1,28 @@
+<!-- Form for adding a new program -->
+{% extends 'university/base.html' %}
+
+{% block content %}
+<h2>Add a new Program</h2>
+<form method="post" action="" novalidate>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+      {% for field in form %}
+        <div class="form-group">
+          {{ field.label_tag }}
+          {{ field }}
+          {% if field.errors %}
+            <div class="alert alert-danger mt-2" role="alert">
+              {% for error in field.errors %}
+                {{ error }}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    <button class="btn btn-primary" type="submit">Save</button>
+  </form>
+  <div class="mt-4">
+    <a href="{% url 'program-list' %}" class="btn btn-secondary">Back to Programs</a>
+  </div>
+{% endblock %}

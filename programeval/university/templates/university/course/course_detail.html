@@ -1,0 +1,58 @@
+<!-- course_detail.html -->
+
+{% extends 'university/base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2 class="mb-4">{{ course.dept.dept_code }}{{ course.course_id }} Details</h2>
+
+    <div class="card">
+      <div class="card-body">
+        <p class="card-text"><strong>Course ID:</strong> {{ course.dept.dept_code }}{{ course.course_id }}</p>
+        <p class="card-text"><strong>Department:</strong> {{ course.dept.name }}</p>
+        <p class="card-text"><strong>Title:</strong> {{ course.title }}</p>
+        <p class="card-text"><strong>Description:</strong> {{ course.description }}</p>
+      </div>
+    </div>
+
+    <div class="container mt-4">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">Sections</h2>
+        <a class="btn btn-primary mb-1" href="{% url 'section-add' dept_id=course.dept.dept_code course_id=course.course_id %}">Add Sections</a>
+      </div>
+      <br>
+    {% if sections %}
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Section ID</th>
+            <th scope="col">Offered In</th>
+            <th scope="col">Professor</th>
+            <th scope="col">Students</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for section in sections %}
+            <tr>
+              <td>{{ section.code }}</td>
+              <td>{{ section.get_semester_display }} {{ section.year }}</td>
+              <td>{{ section.prof.name }}</td>
+              <td>{{ section.enrolled }}</td>
+              <td>
+                <a class="btn btn-warning btn-sm" href="{% url 'section-update' dept_id=course.dept.dept_code course_id=course.course_id code=section.code semester=section.semester year=section.year %}">Edit</a>
+                <a class="btn btn-danger btn-sm" href="{% url 'section-delete' dept_id=course.dept.dept_code course_id=course.course_id code=section.code semester=section.semester year=section.year %}">Delete</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No sections have been added yet.</p>
+    {% endif %}
+
+    <div class="mt-4">
+      <a href="{% url 'course-list' %}" class="btn btn-secondary">Back to Courses</a>
+    </div>
+  </div>
+{% endblock %}
