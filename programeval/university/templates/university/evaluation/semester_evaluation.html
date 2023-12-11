@@ -22,12 +22,12 @@
                                                     <p><strong>Sub - Objective {{ section_so.program_objective.objective.code }}.{{ section_so.sub_objective.pk }}</strong>: {{ section_so.program_objective.objective.title }} > {{ section_so.sub_objective.description }}</p>
                                                     <div class="ml-3">
                                                         <p><strong>Evaluation Method</strong>: {{ evaluation.method }}</p>
-                                                        <p><strong>Students</strong> {{ evaluation.qualified }}/{{ section_so.section.enrolled }}</p>
+                                                        <p><strong>Students</strong>: {{ evaluation.qualified }}/{{ section_so.section.enrolled }}</p>
                                                     </div>
                                                 {% else %}
                                                     <p><strong>{{ section_so.program_objective.objective.code }}</strong>: {{ section_so.program_objective.objective.title }}</p>
                                                     <div class="ml-3">
-                                                        <p><strong>Method</strong> {{ evaluation.method }}</p>
+                                                        <p><strong>Evaluation Method</strong>: {{ evaluation.method }}</p>
                                                         <p><strong>Students</strong>: {{ evaluation.qualified }}/{{ section_so.section.enrolled }}</p>
                                                     </div>
                                                 {% endif %}

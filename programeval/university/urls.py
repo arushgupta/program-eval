@@ -10,6 +10,7 @@ urlpatterns = [
     path('departments/<str:pk>/', views.department_detail, name='dept-detail'),
     path('departments/<str:pk>/change/', views.department_update, name='dept-update'),
     path('departments/<str:pk>/remove/', views.department_delete, name='dept-delete'),
+    path('departments/faculty/<str:pk>/re-hire/', views.department_rehire, name='department-rehire'),
 
     # Faculty
     path('faculty/', views.faculty_list, name='faculty-list'),

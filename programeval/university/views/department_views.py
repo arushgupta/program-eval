@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from university.models import Department
+from university.models import Department, Faculty
 from university.forms import DepartmentForm, UpdateDepartmentForm
 
 def department_list(request):
@@ -38,3 +38,8 @@ def department_delete(request, pk):
         return redirect('dept-list')
     return render(request, 'university/department/department_delete.html', {'department': department})
 
+def department_rehire(request, pk):
+    faculty = get_object_or_404(Faculty, pk=pk)
+    faculty.is_active = True
+    faculty.save()
+    return redirect('dept-detail', faculty.department.dept_code)
