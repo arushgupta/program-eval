@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from university.models import Objective, ProgramCourseObjective, Course, ProgramCourse, SubObjective
+from university.models import Objective, SubObjective
 from university.forms import AddObjectiveForm, AddSubObjectiveForm, UpdateObjectiveForm, UpdateSubObjectiveForm  
 
 def objective_list(request):
@@ -69,15 +69,3 @@ def delete_sub_objective(request, o_code, s_code):
         sub_objective.delete()
         return redirect('objective-detail', o_code)
     return render(request, 'university/objective/delete_sub_objective.html', {'objective': objective, 'sub_objective': sub_objective})
-
-# def assign_objective_to_course(request, course_id):
-#     course = get_object_or_404(Course, pk=course_id)
-#     if request.method == 'POST':
-#         objective_id = request.POST.get('objective_id')
-#         objective = get_object_or_404(Objective, pk=objective_id)
-#         ProgramCourseObjective.objects.create(course=course, objective=objective)
-#         return redirect('course-detail', course_id)
-#     objectives = Objective.objects.exclude(program_courses__course=course)
-#     return render(request, 'university/objective/assign_to_course.html', {'course': course, 'objectives': objectives})
-
-

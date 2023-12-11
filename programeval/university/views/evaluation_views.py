@@ -3,7 +3,7 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from university.views.base_views import home
 from university.forms import AddEvaluationForm, SemesterEvaluationForm, UpdateEvaluationForm, YearlyEvaluationForm
-from university.models import Objective, ProgramCourse, ProgramCourseObjective, ProgramObjective, Section, SectionEvaluation, SectionSubObjective, SubObjective
+from university.models import Objective, ProgramCourse, Section, SectionEvaluation, SectionSubObjective, SubObjective
 
 def program_course_section_detail(request, program_id, course_id, semester, year, section_code):
     program_course = get_object_or_404(ProgramCourse, program__name=program_id, course_id=course_id)
