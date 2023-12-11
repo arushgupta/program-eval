@@ -1,0 +1,39 @@
+<!-- yearly_evaluation.html -->
+{% extends 'university/base.html' %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h2 class="mb-4">Yearly Evaluation</h2>
+        <br>
+        {% if evaluations %}
+            {% for objective, evaluations, qualified, total, percent in evaluations %}
+                <h4><strong>Objective {{ objective.code }}</strong>: {{ objective.title }}</h4>
+                <h5><strong>Students who met objective</strong>: {{ qualified }}</h5>
+                <h5><strong>Total students evaluated</strong>: {{ total }}</h5>
+                <h5><strong>Success Rate</strong>: {{ percent }}%</h5>
+                <br>
+                {% for evaluation in evaluations %}
+                    <div class="mb-2 ml-3">
+                        <p><strong>Program</strong>: {{ evaluation.section_sub_objective.program_course.program.name }}</p>
+                        <p><strong>Course</strong>: {{ evaluation.section_sub_objective.program_course.course.dept.dept_code }}{{ evaluation.section_sub_objective.program_course.course.course_id }}</p>
+                        <p><strong>Section</strong>: {{ evaluation.section_sub_objective.section.code }} {{ evaluation.section_sub_objective.section.get_semester_display }} {{ evaluation.section_sub_objective.section.year }}</p>
+                        {% if evaluation.section_sub_objective.program_course_objective.has_sub_objectives %}
+                            <p><strong>Sub-Objective</strong>: {{ evaluation.section_sub_objective.sub_objective.description }}</p>
+                            <!-- {% for sub_objective in evaluation.section_sub_objective.program_course_objective.program_objective.objective.so_objectives.all  %}
+                                <p><strong>Sub-Objective:</strong> {{ sub_objective.description }} </p>
+                            {% endfor %} -->
+                        {% endif %}
+                        <div class="ml-3">
+                            <p><strong>Qualified Students</strong>: {{ evaluation.qualified }}</p>
+                            <p><strong>Enrolled Students</strong>: {{ evaluation.section_sub_objective.section.enrolled }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+                <br>
+            {% endfor %}
+            <br>
+        {% else %}
+            <p>No objectives have been assigned to courses in this academic year.</p>
+        {% endif %}
+    </div>
+{% endblock %}

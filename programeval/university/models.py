@@ -96,6 +96,9 @@ class Section(models.Model):
         verbose_name = _('Section')
         verbose_name_plural = _('Sections')
         unique_together = ('code', 'course', 'semester', 'year')
+    
+    def __str__(self):
+        return f"{self.course.dept.dept_code}{self.course.course_id}: {self.code} {Section.Semester(self.semester).label} {self.year}"
 
 
 class Objective(models.Model):
@@ -103,7 +106,7 @@ class Objective(models.Model):
     title = models.CharField(_("Title"), max_length=50)
 
     def __str__(self):
-        return self.title
+        return f"{self.code}: {self.title}"
 
     class Meta:
         verbose_name = _('Objective')
