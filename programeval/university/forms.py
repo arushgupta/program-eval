@@ -168,6 +168,7 @@ class AddProgramCourseObjectivesForm(forms.ModelForm):
         self.fields["program_course"].disabled = True
         self.fields["program_course"].label = "Course"
         self.fields["program_objective"].label = "Objective"
+        self.fields["program_objective"].queryset = ProgramObjective.objects.filter(program=program)
         self.fields["sub_objective"].label = "Sub-Objective"
         self.fields["sub_objective"].queryset = SubObjective.objects.none()
         self.fields["sub_objective"].required = False
@@ -253,3 +254,18 @@ class SemesterEvaluationForm(forms.Form):
     year = forms.ChoiceField(choices=years, label='Year', initial=datetime.now().year)
     program = forms.ModelChoiceField(queryset=Program.objects.all(), label='Program')
 
+class YearlyEvaluationForm(forms.Form):
+    years = []
+    for y in range(2010, (datetime.now().year + 5)):
+        years.append(y)
+
+    academic_years = []
+    for i in range(len(years)):
+        if i + 1 >= len(years):
+            year = f"{years[i]}"
+            academic_years.append((year, year))
+        else:
+            year = f"{years[i]} - {years[i + 1]}"
+            academic_years.append((year, year))
+
+    academic_year = forms.ChoiceField(choices=academic_years, label="Academic Year", initial=academic_years[0])

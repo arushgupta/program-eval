@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from university.forms import SemesterEvaluationForm
+from university.forms import SemesterEvaluationForm, YearlyEvaluationForm
 from university.models import Course, Department, Faculty, Program
 
 # Create your views here.
@@ -8,13 +8,15 @@ def home(request):
     programs = Program.objects.all().count()
     faculty = Faculty.objects.filter(is_active=True).count()
     courses = Course.objects.all().count()
-    form = SemesterEvaluationForm()
+    semester_form = SemesterEvaluationForm()
+    yearly_form = YearlyEvaluationForm()
 
     context = {
         'departments': departments,
         'programs': programs,
         'faculty': faculty,
         'courses': courses,
-        'form': form
+        'semester_form': semester_form,
+        'yearly_form': yearly_form
     }
     return render(request, 'university/home.html', context)

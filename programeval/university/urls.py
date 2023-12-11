@@ -70,4 +70,5 @@ urlpatterns = [
 
     # Evaluation Results
     path('semester-evaluations/', views.get_semester_program_evaluation, name='get-semester-program-evaluation'),
+    path('yearly-evaluations/', views.get_yearly_evaluation, name='get-yearly-evaluation'),
 ]
