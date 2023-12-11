@@ -21,7 +21,6 @@
 
     <div class="d-flex justify-content-between align-items-center">
       <h2 class="mb-0">Active Faculty</h2>
-      <a class="btn btn-primary mb-1" href="#">Hire Faculty</a>
     </div>
     <br>
     <ol>
@@ -49,7 +48,7 @@
         {% if not faculty.is_active %}
           <li>
             <span>{{ faculty.name }} - Rank: {{ faculty.get_rank_display }}</span>
-            <span><a href="#">[re-hire]</a></span>
+            <span><a href="{% url 'department-rehire' pk=faculty.pk %}">[re-hire]</a></span>
           </li>
         {% endif %}
       {% endfor %}
